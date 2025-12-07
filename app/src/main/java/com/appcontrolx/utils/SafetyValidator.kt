@@ -56,7 +56,6 @@ object SafetyValidator {
         "com.google.android.ext.shared",
         "com.google.android.onetimeinitializer",
         "com.google.android.partnersetup",
-        "com.google.android.setupwizard",
         "com.google.android.configupdater",
         "com.google.android.providers.media.module",
         "com.google.android.webview",
