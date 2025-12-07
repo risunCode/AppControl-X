@@ -11,7 +11,9 @@ import com.appcontrolx.R
 import com.appcontrolx.databinding.ActivitySetupBinding
 import com.appcontrolx.ui.MainActivity
 import com.appcontrolx.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SetupActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivitySetupBinding

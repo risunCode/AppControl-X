@@ -9,7 +9,10 @@ import com.appcontrolx.BuildConfig
 import com.appcontrolx.R
 import com.appcontrolx.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        Timber.d("MainActivity created")
         setupNavigation()
         showWhatsNewIfNeeded()
     }
@@ -44,14 +48,15 @@ class MainActivity : AppCompatActivity() {
     
     private fun showWhatsNewDialog() {
         val whatsNew = """
-            |• Smart app caching - faster loading
-            |• Status badges (Frozen/Running/Stopped/BG Restricted)
+            |• MVVM Architecture with Hilt DI
+            |• Crash reporting with Firebase
+            |• Optimized release build
+            |• Smart app caching
+            |• Status badges
             |• Tools tab with hidden settings
             |• Activity Launcher
-            |• Batch operation with live progress
-            |• Execution mode persistence fix
-            |• Self-protection enabled
-            |• Improved UI/UX
+            |• Batch operations
+            |• Enhanced security
         """.trimMargin()
         
         MaterialAlertDialogBuilder(this)
