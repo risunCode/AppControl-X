@@ -179,20 +179,16 @@ class BatchProgressBottomSheet : BottomSheetDialogFragment() {
             delay(50) // Small delay for UI
         }
 
-        // Complete
+        // Complete - invoke callback immediately to save log
+        onComplete?.invoke(successCount, failCount)
+        
         b.tvProgress.text = if (failCount == 0) {
             getString(R.string.batch_all_success, successCount)
         } else {
             getString(R.string.batch_partial_success, successCount, failCount)
         }
         b.btnCancel.text = getString(R.string.btn_close)
-        
-        val finalSuccess = successCount
-        val finalFail = failCount
-        b.btnCancel.setOnClickListener {
-            onComplete?.invoke(finalSuccess, finalFail)
-            dismiss()
-        }
+        b.btnCancel.setOnClickListener { dismiss() }
     }
 
     override fun onDestroyView() {

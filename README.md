@@ -115,6 +115,12 @@ appops set <package> RUN_IN_BACKGROUND allow     # Allow
 appops set <package> WAKE_LOCK ignore            # Disable wake lock
 ```
 
+## Known Issues
+
+| Issue | Status | Impact |
+|-------|--------|--------|
+| App running detection may fail | Won't Fix (Lazy) | Sorting by running status doesn't work reliably |
+
 ## Contributing
 
 1. Fork the repository

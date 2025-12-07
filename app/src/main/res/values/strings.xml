@@ -294,7 +294,7 @@
     <string name="badge_frozen">FROZEN</string>
     <string name="badge_running">RUNNING</string>
     <string name="badge_stopped">STOPPED</string>
-    <string name="badge_restricted">BG RESTRICTED</string>
+    <string name="badge_restricted">BACKGROUND RESTRICTED</string>
     <string name="badge_exported">EXPORTED</string>
     
     <!-- Status Filter -->

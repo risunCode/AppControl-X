@@ -113,13 +113,15 @@ class AppListAdapter(
                 root.alpha = if (app.isEnabled) 1f else 0.6f
                 
                 // Status badges
-                val hasAnyBadge = app.isFrozen || app.isRunning || app.isStopped || app.isBackgroundRestricted
+                // Running detection: if not frozen, not stopped, not restricted = running
+                val isEffectivelyRunning = !app.isFrozen && !app.isStopped && !app.isBackgroundRestricted
+                val hasAnyBadge = app.isFrozen || isEffectivelyRunning || app.isStopped || app.isBackgroundRestricted
                 statusContainer.visibility = if (hasAnyBadge) View.VISIBLE else View.GONE
                 
                 tvStatusFrozen.visibility = if (app.isFrozen) View.VISIBLE else View.GONE
-                tvStatusRunning.visibility = if (app.isRunning && !app.isFrozen) View.VISIBLE else View.GONE
-                tvStatusStopped.visibility = if (app.isStopped && !app.isFrozen && !app.isRunning) View.VISIBLE else View.GONE
-                tvStatusRestricted.visibility = if (app.isBackgroundRestricted) View.VISIBLE else View.GONE
+                tvStatusRunning.visibility = if (isEffectivelyRunning) View.VISIBLE else View.GONE
+                tvStatusStopped.visibility = if (app.isStopped && !app.isFrozen) View.VISIBLE else View.GONE
+                tvStatusRestricted.visibility = if (app.isBackgroundRestricted && !app.isFrozen) View.VISIBLE else View.GONE
                 
                 // Tap: if in selection mode -> toggle, else -> show info
                 cardApp.setOnClickListener {
