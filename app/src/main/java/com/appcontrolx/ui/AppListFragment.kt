@@ -128,11 +128,12 @@ class AppListFragment : Fragment() {
         var filtered = cachedApps
         
         // Apply status filter
+        // Running logic: not frozen AND not stopped (same as badge logic in adapter)
         filtered = when (currentStatusFilter) {
             StatusFilter.ALL -> filtered
-            StatusFilter.RUNNING -> filtered.filter { it.isRunning }
+            StatusFilter.RUNNING -> filtered.filter { !it.isFrozen && !it.isStopped }
             StatusFilter.STOPPED -> filtered.filter { it.isStopped }
-            StatusFilter.FROZEN -> filtered.filter { !it.isEnabled }
+            StatusFilter.FROZEN -> filtered.filter { it.isFrozen }
             StatusFilter.RESTRICTED -> filtered.filter { it.isBackgroundRestricted }
         }
         
