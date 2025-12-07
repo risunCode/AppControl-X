@@ -32,7 +32,7 @@
     <string name="setup_permissions_desc">Grant permissions and select execution mode</string>
     <string name="setup_permissions_section">Permissions</string>
     <string name="setup_mode_section">Execution Mode</string>
-    <string name="setup_xiaomi_title">Xiaomi Setup</string>
+
     <string name="setup_complete_title">Setup Complete</string>
     <string name="permission_notification">Notifications</string>
     <string name="permission_query_apps">Query Installed Apps</string>
@@ -50,20 +50,6 @@
     <string name="disclaimer_point_4">Always create a backup before making significant changes to your system</string>
     <string name="disclaimer_agree">I understand the risks and accept full responsibility for any consequences</string>
     <string name="disclaimer_accept">I Accept &amp; Continue</string>
-    
-    <!-- Xiaomi -->
-    <string name="miui_detected">MIUI %d detected</string>
-    <string name="hyperos_detected">HyperOS %.1f detected</string>
-    <string name="unknown_xiaomi_ui">Unknown Xiaomi UI</string>
-    <string name="xiaomi_setup_desc">Xiaomi devices have aggressive battery optimization that may kill background apps. Configure these settings to ensure AppControlX works properly.</string>
-    <string name="xiaomi_battery_title">Battery Optimization</string>
-    <string name="xiaomi_battery_desc">Disable battery restrictions for AppControlX to prevent it from being killed in the background.</string>
-    <string name="xiaomi_open_battery">Open Battery Settings</string>
-    <string name="xiaomi_lock_title">Lock in Recent Apps</string>
-    <string name="xiaomi_lock_desc">Lock AppControlX in recent apps to prevent it from being cleared when you swipe away apps.</string>
-    <string name="xiaomi_view_tutorial">View Tutorial</string>
-    <string name="lock_app_title">Lock App in Recents</string>
-    <string name="lock_app_tutorial">To prevent AppControlX from being killed:\n\n1. Open Recent Apps\n2. Long press on AppControlX card\n3. Tap the lock icon\n\nThis will keep the app running in background.</string>
     
     <!-- Errors -->
     <string name="error_open_autostart">Could not open Autostart settings</string>

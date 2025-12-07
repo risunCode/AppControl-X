@@ -18,4 +18,8 @@
     <color name="outline">#E0E0E0</color>
     <color name="warning_color">#FF9800</color>
     <color name="warning_bg">#FFF3E0</color>
+    
+    <!-- Selection -->
+    <color name="selected_bg">#E3F2FD</color>
+    <color name="selected_stroke">#1976D2</color>
 </resources>
