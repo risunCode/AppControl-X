@@ -313,16 +313,20 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
                 val result = withContext(Dispatchers.IO) { action() }
                 val success = result?.isSuccess == true
                 
-                // Log action
-                if (logActionName != null && appInfo != null) {
+                // Log action - always log for all action types
+                if (appInfo != null && rollbackManager != null) {
+                    val finalLogAction = logActionName ?: actionName.uppercase().replace(" ", "_")
                     withContext(Dispatchers.IO) {
-                        rollbackManager?.logAction(ActionLog(
-                            action = logActionName,
+                        timber.log.Timber.d("Manual action: $finalLogAction, success=$success")
+                        rollbackManager!!.logAction(ActionLog(
+                            action = finalLogAction,
                             packages = listOf(appInfo!!.packageName),
                             success = success,
                             message = if (success) null else "Failed"
                         ))
                     }
+                } else {
+                    timber.log.Timber.w("Cannot log: appInfo=${appInfo != null}, rm=${rollbackManager != null}")
                 }
                 
                 if (success) {
@@ -365,15 +369,18 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
                 val success = result?.isSuccess == true
                 
                 // Log action
-                if (appInfo != null) {
+                if (appInfo != null && rollbackManager != null) {
                     withContext(Dispatchers.IO) {
-                        rollbackManager?.logAction(ActionLog(
+                        timber.log.Timber.d("Background action: $logActionName, success=$success")
+                        rollbackManager!!.logAction(ActionLog(
                             action = logActionName,
                             packages = listOf(appInfo!!.packageName),
                             success = success,
                             message = if (success) null else "Failed"
                         ))
                     }
+                } else {
+                    timber.log.Timber.w("Cannot log bg action: appInfo=${appInfo != null}, rm=${rollbackManager != null}")
                 }
                 
                 if (success) {

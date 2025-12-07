@@ -417,15 +417,20 @@ class AppListFragment : Fragment() {
                     }
                 }
             },
-            onComplete = { _, failCount ->
-                // Log action
-                lifecycleScope.launch(Dispatchers.IO) {
-                    rm?.logAction(ActionLog(
-                        action = action.name,
-                        packages = packages,
-                        success = failCount == 0,
-                        message = if (failCount == 0) null else "$failCount failed"
-                    ))
+            onComplete = { successCount, failCount ->
+                // Log action - always log regardless of action type
+                if (rm != null) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        timber.log.Timber.d("Batch complete: ${action.name}, success=$successCount, fail=$failCount")
+                        rm.logAction(ActionLog(
+                            action = action.name,
+                            packages = packages,
+                            success = failCount == 0,
+                            message = if (failCount == 0) "All $successCount succeeded" else "$failCount failed"
+                        ))
+                    }
+                } else {
+                    timber.log.Timber.w("RollbackManager is null, cannot log action")
                 }
                 
                 adapter.deselectAll()

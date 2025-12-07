@@ -4,6 +4,7 @@ import android.content.Context
 import com.appcontrolx.executor.CommandExecutor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import timber.log.Timber
 import java.io.File
 import java.util.UUID
 
@@ -15,6 +16,10 @@ class RollbackManager(
     private val snapshotDir = File(context.filesDir, "snapshots").apply { mkdirs() }
     private val snapshotFile = File(snapshotDir, "rollback_snapshot.json")
     private val historyFile = File(snapshotDir, "action_history.json")
+    
+    init {
+        Timber.d("RollbackManager initialized, historyFile: ${historyFile.absolutePath}")
+    }
     
     fun saveSnapshot(packages: List<String>): StateSnapshot {
         val states = packages.map { pkg ->
@@ -68,20 +73,35 @@ class RollbackManager(
     }
     
     fun logAction(action: ActionLog) {
-        val history = getActionHistory().toMutableList()
-        history.add(0, action) // Add to beginning
-        
-        // Keep only last 100 actions
-        val trimmed = history.take(100)
-        historyFile.writeText(gson.toJson(trimmed))
+        try {
+            Timber.d("Logging action: ${action.action} for ${action.packages.size} packages")
+            val history = getActionHistory().toMutableList()
+            history.add(0, action) // Add to beginning
+            
+            // Keep only last 100 actions
+            val trimmed = history.take(100)
+            val json = gson.toJson(trimmed)
+            historyFile.writeText(json)
+            Timber.d("Action logged successfully, total logs: ${trimmed.size}")
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to log action: ${action.action}")
+        }
     }
     
     fun getActionHistory(): List<ActionLog> {
-        if (!historyFile.exists()) return emptyList()
+        if (!historyFile.exists()) {
+            Timber.d("History file does not exist")
+            return emptyList()
+        }
         return try {
+            val content = historyFile.readText()
+            Timber.d("Reading history file, size: ${content.length} bytes")
             val type = object : TypeToken<List<ActionLog>>() {}.type
-            gson.fromJson(historyFile.readText(), type) ?: emptyList()
+            val logs: List<ActionLog>? = gson.fromJson(content, type)
+            Timber.d("Parsed ${logs?.size ?: 0} logs")
+            logs ?: emptyList()
         } catch (e: Exception) {
+            Timber.e(e, "Failed to read action history")
             emptyList()
         }
     }
