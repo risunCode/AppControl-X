@@ -15,13 +15,29 @@ class App : Application() {
         private const val TAG = "AppControlX"
         
         init {
-            // Configure libsu
+            // Configure libsu for root shell
             Shell.enableVerboseLogging = BuildConfig.DEBUG
             Shell.setDefaultBuilder(
                 Shell.Builder.create()
-                    .setFlags(Shell.FLAG_REDIRECT_STDERR)
-                    .setTimeout(30) // Increase timeout for slow devices
+                    .setFlags(Shell.FLAG_REDIRECT_STDERR or Shell.FLAG_NON_ROOT_SHELL)
+                    .setTimeout(30)
             )
+        }
+        
+        /**
+         * Get root shell - call this to request su permission
+         */
+        fun getRootShell(): Shell? {
+            return try {
+                val shell = Shell.Builder.create()
+                    .setFlags(Shell.FLAG_REDIRECT_STDERR)
+                    .setTimeout(30)
+                    .build("su")
+                if (shell.isRoot) shell else null
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to get root shell", e)
+                null
+            }
         }
     }
     

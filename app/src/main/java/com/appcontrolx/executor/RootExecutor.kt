@@ -58,13 +58,17 @@ class RootExecutor : CommandExecutor {
         }
         
         return try {
-            // Ensure shell is ready
-            val shell = Shell.getShell()
+            // Build su shell and execute command
+            val shell = Shell.Builder.create()
+                .setFlags(Shell.FLAG_REDIRECT_STDERR)
+                .setTimeout(30)
+                .build("su")
+            
             if (!shell.isRoot) {
-                return Result.failure(Exception("Root access not available"))
+                return Result.failure(Exception("Root access not available - su denied"))
             }
             
-            val result = Shell.cmd(command).exec()
+            val result = shell.newJob().add(command).exec()
             if (result.isSuccess) {
                 Result.success(result.out.joinToString("\n"))
             } else {
@@ -84,7 +88,20 @@ class RootExecutor : CommandExecutor {
         }
         
         return try {
-            val result = Shell.cmd(*commands.toTypedArray()).exec()
+            // Build su shell
+            val shell = Shell.Builder.create()
+                .setFlags(Shell.FLAG_REDIRECT_STDERR)
+                .setTimeout(30)
+                .build("su")
+            
+            if (!shell.isRoot) {
+                return Result.failure(Exception("Root access not available - su denied"))
+            }
+            
+            val job = shell.newJob()
+            commands.forEach { job.add(it) }
+            val result = job.exec()
+            
             if (result.isSuccess) {
                 Result.success(Unit)
             } else {

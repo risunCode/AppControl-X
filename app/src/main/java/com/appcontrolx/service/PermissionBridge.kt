@@ -64,16 +64,27 @@ class PermissionBridge(private val context: Context? = null) {
      */
     fun checkRootNow(): Boolean {
         return try {
-            // Get shell instance - this will trigger root request if needed
-            val shell = Shell.getShell()
+            // Try to get root shell by executing su
+            val result = Shell.cmd("id").exec()
             
-            // Check if shell is root
-            if (shell.isRoot) {
-                return true
+            if (result.isSuccess) {
+                val output = result.out.joinToString("\n")
+                // Check if we're running as root (uid=0)
+                if (output.contains("uid=0")) {
+                    android.util.Log.d("PermissionBridge", "Root confirmed: $output")
+                    return true
+                }
             }
             
-            // Fallback check
-            Shell.isAppGrantedRoot() == true
+            // Alternative: try su directly
+            val suResult = Shell.Builder.create()
+                .setFlags(Shell.FLAG_REDIRECT_STDERR)
+                .setTimeout(30)
+                .build("su")
+            
+            val isRoot = suResult.isRoot
+            android.util.Log.d("PermissionBridge", "Su shell isRoot: $isRoot")
+            isRoot
         } catch (e: Exception) {
             android.util.Log.e("PermissionBridge", "Root check failed", e)
             false
