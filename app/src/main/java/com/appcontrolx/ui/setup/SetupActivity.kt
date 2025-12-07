@@ -2,9 +2,12 @@ package com.appcontrolx.ui.setup
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.appcontrolx.R
 import com.appcontrolx.databinding.ActivitySetupBinding
 import com.appcontrolx.service.XiaomiBridge
 import com.appcontrolx.ui.MainActivity
@@ -59,8 +62,8 @@ class SetupActivity : AppCompatActivity() {
     private fun setupDotsIndicator(count: Int) {
         binding.dotsIndicator.removeAllViews()
         for (i in 0 until count) {
-            val dot = android.view.View(this).apply {
-                layoutParams = android.widget.LinearLayout.LayoutParams(12, 12).apply {
+            val dot = View(this).apply {
+                layoutParams = LinearLayout.LayoutParams(12, 12).apply {
                     marginStart = 8
                     marginEnd = 8
                 }

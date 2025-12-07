@@ -56,6 +56,9 @@ dependencies {
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     
+    // Preference
+    implementation("androidx.preference:preference-ktx:1.2.1")
+    
     // Shizuku
     implementation("dev.rikka.shizuku:api:13.1.5")
     implementation("dev.rikka.shizuku:provider:13.1.5")
