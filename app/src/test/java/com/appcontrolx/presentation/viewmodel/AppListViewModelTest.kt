@@ -13,10 +13,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppListViewModelTest {
@@ -62,8 +62,9 @@ class AppListViewModelTest {
             
             val success = awaitItem()
             assertTrue(success is AppListUiState.Success)
-            assertEquals(1, success.apps.size)
-            assertEquals("Test App", success.apps[0].appName)
+            val successState = success as AppListUiState.Success
+            assertEquals(1, successState.apps.size)
+            assertEquals("Test App", successState.apps[0].appName)
         }
     }
     
@@ -84,7 +85,8 @@ class AppListViewModelTest {
             
             val errorState = awaitItem()
             assertTrue(errorState is AppListUiState.Error)
-            assertEquals("Network error", errorState.message)
+            val error = errorState as AppListUiState.Error
+            assertEquals("Network error", error.message)
         }
     }
     

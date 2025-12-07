@@ -1,9 +1,8 @@
 package com.appcontrolx.executor
 
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class RootExecutorTest {
     
