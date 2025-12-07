@@ -156,8 +156,7 @@
             app:cardCornerRadius="12dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/outline"
-            app:checkedIcon="@drawable/ic_check_circle"
-            app:checkedIconTint="?attr/colorPrimary">
+            app:checkedIcon="@null">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -231,8 +230,7 @@
             app:cardCornerRadius="12dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/outline"
-            app:checkedIcon="@drawable/ic_check_circle"
-            app:checkedIconTint="?attr/colorPrimary">
+            app:checkedIcon="@null">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -306,8 +304,7 @@
             app:cardCornerRadius="12dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/outline"
-            app:checkedIcon="@drawable/ic_check_circle"
-            app:checkedIconTint="?attr/colorPrimary">
+            app:checkedIcon="@null">
 
             <LinearLayout
                 android:layout_width="match_parent"
