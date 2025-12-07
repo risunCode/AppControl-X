@@ -1,34 +1,30 @@
 package com.appcontrolx.worker
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.appcontrolx.data.repository.AppRepository
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.first
-import timber.log.Timber
+import com.appcontrolx.service.AppFetcher
 
-@HiltWorker
-class AppSyncWorker @AssistedInject constructor(
-    @Assisted context: Context,
-    @Assisted params: WorkerParameters,
-    private val repository: AppRepository
+class AppSyncWorker(
+    context: Context,
+    params: WorkerParameters
 ) : CoroutineWorker(context, params) {
+    
+    private val appFetcher = AppFetcher(context)
     
     override suspend fun doWork(): Result {
         return try {
-            Timber.d("Starting app sync worker")
+            Log.d(TAG, "Starting app sync worker")
             
             // Pre-fetch apps to cache
-            repository.getUserApps().first()
-            repository.getSystemApps().first()
+            appFetcher.getUserApps()
+            appFetcher.getSystemApps()
             
-            Timber.d("App sync completed successfully")
+            Log.d(TAG, "App sync completed successfully")
             Result.success()
         } catch (e: Exception) {
-            Timber.e(e, "App sync failed")
+            Log.e(TAG, "App sync failed", e)
             if (runAttemptCount < 3) {
                 Result.retry()
             } else {
@@ -38,6 +34,7 @@ class AppSyncWorker @AssistedInject constructor(
     }
     
     companion object {
+        private const val TAG = "AppSyncWorker"
         const val WORK_NAME = "app_sync_worker"
     }
 }
