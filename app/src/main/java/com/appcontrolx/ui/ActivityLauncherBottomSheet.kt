@@ -29,6 +29,7 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
     private lateinit var adapter: AppActivityAdapter
     private var allAppGroups: List<AppActivityGroup> = emptyList()
     private var showSystemApps = false
+    private var currentSearchQuery: String = ""
     
     data class ActivityItem(
         val packageName: String,
@@ -112,7 +113,8 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
         b.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                filterActivities(newText)
+                currentSearchQuery = newText?.trim() ?: ""
+                filterActivities()
                 return true
             }
         })
@@ -177,16 +179,33 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
         return activity.exported || activity.labelRes != 0
     }
     
-    private fun filterActivities(searchQuery: String? = null) {
+    private fun filterActivities() {
         var filtered = allAppGroups.filter { it.isSystem == showSystemApps }
         
         // Apply search filter
-        if (!searchQuery.isNullOrBlank()) {
-            val query = searchQuery.lowercase()
-            filtered = filtered.filter { group ->
-                group.appName.lowercase().contains(query) ||
-                group.packageName.lowercase().contains(query) ||
-                group.activities.any { it.shortName.lowercase().contains(query) }
+        if (currentSearchQuery.isNotBlank()) {
+            val query = currentSearchQuery.lowercase()
+            filtered = filtered.mapNotNull { group ->
+                // Check if app name or package matches
+                val appMatches = group.appName.lowercase().contains(query) ||
+                                 group.packageName.lowercase().contains(query)
+                
+                // Filter activities that match
+                val matchingActivities = group.activities.filter { activity ->
+                    activity.shortName.lowercase().contains(query) ||
+                    activity.activityName.lowercase().contains(query)
+                }
+                
+                when {
+                    // If app name matches, show all activities
+                    appMatches -> group
+                    // If only activities match, show only those activities
+                    matchingActivities.isNotEmpty() -> group.copy(
+                        activities = matchingActivities,
+                        isExpanded = true // Auto expand when searching
+                    )
+                    else -> null
+                }
             }
         }
         
