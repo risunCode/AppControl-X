@@ -46,15 +46,29 @@ class AppFetcher(private val context: Context) {
     private fun getRunningPackages(): Set<String> {
         val running = mutableSetOf<String>()
         
-        // Method 1: Try root command first (most accurate)
+        // Method 1: Try root command (most accurate on Android 10+)
         try {
             if (Shell.isAppGrantedRoot() == true) {
-                val result = Shell.cmd("ps -A -o NAME").exec()
-                if (result.isSuccess) {
+                // Use dumpsys to get running apps - more reliable than ps
+                val result = Shell.cmd("dumpsys activity processes | grep 'app=' | cut -d'=' -f2 | cut -d'/' -f1").exec()
+                if (result.isSuccess && result.out.isNotEmpty()) {
                     result.out.forEach { line ->
-                        val processName = line.trim()
-                        if (processName.isNotEmpty() && processName.contains(".")) {
-                            running.add(processName)
+                        val pkg = line.trim()
+                        if (pkg.isNotEmpty() && pkg.contains(".")) {
+                            running.add(pkg)
+                        }
+                    }
+                }
+                
+                // Fallback: also check with cmd package list
+                if (running.isEmpty()) {
+                    val result2 = Shell.cmd("cmd activity get-current-user; for pid in /proc/[0-9]*; do cat \$pid/cmdline 2>/dev/null | tr '\\0' '\\n' | head -1; done | grep '\\.' | sort -u").exec()
+                    if (result2.isSuccess) {
+                        result2.out.forEach { line ->
+                            val pkg = line.trim()
+                            if (pkg.isNotEmpty() && pkg.contains(".") && !pkg.startsWith("/")) {
+                                running.add(pkg)
+                            }
                         }
                     }
                 }
