@@ -312,4 +312,8 @@
     <string name="batch_completed">Completed</string>
     <string name="batch_all_success">All %d apps processed successfully</string>
     <string name="batch_partial_success">%1$d success, %2$d failed</string>
+    <string name="batch_waiting">Waiting to start...</string>
+    <string name="batch_countdown">Starting in %d...</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="status_negative">Failed</string>
 </resources>

@@ -345,76 +345,41 @@ class AppListFragment : Fragment() {
         val pm = policyManager ?: return
         val rm = rollbackManager
         
-        // Show progress dialog with live log
-        val progressDialog = BatchProgressDialog.newInstance(action.name, packages.size)
-        progressDialog.show(childFragmentManager, BatchProgressDialog.TAG)
+        // Get app names for display
+        val appNames = packages.map { pkg -> 
+            adapter.getAppName(pkg) ?: pkg.substringAfterLast(".")
+        }
         
-        lifecycleScope.launch {
-            var successCount = 0
-            var failCount = 0
-            
-            try {
-                rm?.saveSnapshot(packages)
-                
-                withTimeout(ACTION_TIMEOUT_MS) {
-                    for (pkg in packages) {
-                        val appName = adapter.getAppName(pkg) ?: pkg.substringAfterLast(".")
-                        
-                        // Execute on IO thread
-                        val result = withContext(Dispatchers.IO) {
-                            when (action) {
-                                ActionBottomSheet.Action.FREEZE -> pm.freezeApp(pkg)
-                                ActionBottomSheet.Action.UNFREEZE -> pm.unfreezeApp(pkg)
-                                ActionBottomSheet.Action.UNINSTALL -> pm.uninstallApp(pkg)
-                                ActionBottomSheet.Action.FORCE_STOP -> pm.forceStop(pkg)
-                                ActionBottomSheet.Action.RESTRICT_BACKGROUND -> pm.restrictBackground(pkg)
-                                ActionBottomSheet.Action.ALLOW_BACKGROUND -> pm.allowBackground(pkg)
-                                ActionBottomSheet.Action.CLEAR_CACHE -> executor?.execute("pm clear --cache-only $pkg")?.map { } ?: Result.failure(Exception("No executor"))
-                                ActionBottomSheet.Action.CLEAR_DATA -> executor?.execute("pm clear $pkg")?.map { } ?: Result.failure(Exception("No executor"))
-                            }
-                        }
-                        
-                        // Update log on main thread
-                        withContext(Dispatchers.Main) {
-                            val status = getStatusText(action, result.isSuccess)
-                            progressDialog.addLogEntry(appName, status, result.isSuccess)
-                        }
-                        
-                        if (result.isSuccess) successCount++ else failCount++
+        // Show new BottomSheet with countdown
+        val bottomSheet = BatchProgressBottomSheet.newInstance(
+            actionName = action.name,
+            appNames = appNames,
+            packageNames = packages,
+            onExecute = { pkg ->
+                withContext(Dispatchers.IO) {
+                    when (action) {
+                        ActionBottomSheet.Action.FREEZE -> pm.freezeApp(pkg)
+                        ActionBottomSheet.Action.UNFREEZE -> pm.unfreezeApp(pkg)
+                        ActionBottomSheet.Action.UNINSTALL -> pm.uninstallApp(pkg)
+                        ActionBottomSheet.Action.FORCE_STOP -> pm.forceStop(pkg)
+                        ActionBottomSheet.Action.RESTRICT_BACKGROUND -> pm.restrictBackground(pkg)
+                        ActionBottomSheet.Action.ALLOW_BACKGROUND -> pm.allowBackground(pkg)
+                        ActionBottomSheet.Action.CLEAR_CACHE -> executor?.execute("pm clear --cache-only $pkg")?.map { } ?: Result.failure(Exception("No executor"))
+                        ActionBottomSheet.Action.CLEAR_DATA -> executor?.execute("pm clear $pkg")?.map { } ?: Result.failure(Exception("No executor"))
                     }
                 }
-                
-                // Show completion
-                progressDialog.setCompleted(successCount, failCount)
-                
-                rm?.logAction(ActionLog(
-                    action = action.name,
-                    packages = packages,
-                    success = failCount == 0,
-                    message = if (failCount > 0) "$failCount failed" else null
-                ))
-                
-                // Delay before dismiss
-                kotlinx.coroutines.delay(2000)
-                progressDialog.dismiss()
-                
+            },
+            onComplete = {
                 adapter.deselectAll()
                 clearCache()
                 loadApps(forceRefresh = true)
-                
-            } catch (e: TimeoutCancellationException) {
-                progressDialog.dismiss()
-                showErrorDialog(
-                    getString(R.string.error_timeout_title),
-                    getString(R.string.error_timeout_message)
-                )
-            } catch (e: Exception) {
-                progressDialog.dismiss()
-                showErrorDialog(
-                    getString(R.string.error_action_title),
-                    e.message ?: getString(R.string.error_unknown)
-                )
             }
+        )
+        bottomSheet.show(childFragmentManager, BatchProgressBottomSheet.TAG)
+        
+        // Save snapshot before action
+        lifecycleScope.launch {
+            rm?.saveSnapshot(packages)
         }
     }
     
