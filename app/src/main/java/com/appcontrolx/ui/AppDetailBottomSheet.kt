@@ -239,14 +239,14 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
         
         binding.btnRestrictBg.setOnClickListener {
             if (isForceStopOnly || isCritical) { showProtectedWarning(); return@setOnClickListener }
-            executeActionWithLoading(getString(R.string.action_restrict_bg)) {
+            executeBackgroundAction(getString(R.string.action_restrict_bg)) {
                 policyManager?.restrictBackground(appInfo!!.packageName)
             }
         }
         
         binding.btnAllowBg.setOnClickListener {
             if (isForceStopOnly || isCritical) { showProtectedWarning(); return@setOnClickListener }
-            executeActionWithLoading(getString(R.string.action_allow_bg)) {
+            executeBackgroundAction(getString(R.string.action_allow_bg)) {
                 policyManager?.allowBackground(appInfo!!.packageName)
             }
         }
@@ -316,6 +316,47 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
                     // Delay then dismiss
                     kotlinx.coroutines.delay(800)
                     dismiss()
+                } else {
+                    binding.tvActionStatus.text = getString(R.string.action_failed_name, actionName)
+                    binding.tvActionStatus.setTextColor(resources.getColor(R.color.status_negative, null))
+                    setButtonsEnabled(true)
+                }
+            } catch (e: Exception) {
+                binding.tvActionStatus.text = e.message ?: getString(R.string.error_unknown)
+                binding.tvActionStatus.setTextColor(resources.getColor(R.color.status_negative, null))
+                setButtonsEnabled(true)
+            } finally {
+                binding.progressBar.visibility = View.GONE
+            }
+        }
+    }
+    
+    private fun executeBackgroundAction(actionName: String, action: suspend () -> Result<Unit>?) {
+        if (policyManager == null) {
+            Toast.makeText(context, R.string.error_mode_required_message, Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvActionStatus.visibility = View.VISIBLE
+        binding.tvActionStatus.text = getString(R.string.action_processing, actionName)
+        setButtonsEnabled(false)
+        
+        lifecycleScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) { action() }
+                if (result?.isSuccess == true) {
+                    // Refresh background status
+                    val packageName = appInfo?.packageName ?: return@launch
+                    currentBgStatus = withContext(Dispatchers.IO) {
+                        policyManager?.getBackgroundStatus(packageName) ?: BackgroundStatus.DEFAULT
+                    }
+                    updateBatteryStatusUI()
+                    
+                    binding.tvActionStatus.text = getString(R.string.action_completed, actionName)
+                    binding.tvActionStatus.setTextColor(resources.getColor(R.color.status_positive, null))
+                    onActionCompleted?.invoke()
+                    setButtonsEnabled(true)
                 } else {
                     binding.tvActionStatus.text = getString(R.string.action_failed_name, actionName)
                     binding.tvActionStatus.setTextColor(resources.getColor(R.color.status_negative, null))

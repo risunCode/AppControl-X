@@ -295,7 +295,7 @@
         android:textStyle="bold"
         android:textSize="14sp" />
 
-    <!-- Safe Actions - 3 column grid -->
+    <!-- Actions Grid - 3 columns, ordered by safety -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -303,17 +303,18 @@
         android:columnCount="3"
         android:useDefaultMargins="true">
 
+        <!-- Row 1: Force Stop, Freeze, App Info -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnForceStop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:text="@string/action_force_stop"
-            android:textSize="11sp"
+            android:textSize="10sp"
             app:icon="@drawable/ic_stop"
-            app:iconSize="18dp"
+            app:iconSize="20dp"
             app:iconGravity="top"
-            app:iconPadding="4dp"
+            app:iconPadding="2dp"
             style="@style/Widget.Material3.Button.TonalButton" />
 
         <com.google.android.material.button.MaterialButton
@@ -322,50 +323,11 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:text="@string/action_freeze"
-            android:textSize="11sp"
+            android:textSize="10sp"
             app:icon="@drawable/ic_freeze"
-            app:iconSize="18dp"
+            app:iconSize="20dp"
             app:iconGravity="top"
-            app:iconPadding="4dp"
-            style="@style/Widget.Material3.Button.TonalButton" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRestrictBg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="@string/action_restrict_bg"
-            android:textSize="11sp"
-            app:icon="@drawable/ic_battery_alert"
-            app:iconSize="18dp"
-            app:iconGravity="top"
-            app:iconPadding="4dp"
-            style="@style/Widget.Material3.Button.TonalButton" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAllowBg"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="@string/action_allow_bg"
-            android:textSize="11sp"
-            app:icon="@drawable/ic_check_circle"
-            app:iconSize="18dp"
-            app:iconGravity="top"
-            app:iconPadding="4dp"
-            style="@style/Widget.Material3.Button.TonalButton" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClearCache"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="@string/action_clear_cache"
-            android:textSize="11sp"
-            app:icon="@drawable/ic_cleaning"
-            app:iconSize="18dp"
-            app:iconGravity="top"
-            app:iconPadding="4dp"
+            app:iconPadding="2dp"
             style="@style/Widget.Material3.Button.TonalButton" />
 
         <com.google.android.material.button.MaterialButton
@@ -374,31 +336,26 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:text="@string/btn_info"
-            android:textSize="11sp"
+            android:textSize="10sp"
             app:icon="@drawable/ic_info"
-            app:iconSize="18dp"
+            app:iconSize="20dp"
             app:iconGravity="top"
-            app:iconPadding="4dp"
+            app:iconPadding="2dp"
             style="@style/Widget.Material3.Button.TonalButton" />
 
-    </GridLayout>
-
-    <!-- Danger Actions -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/action_danger_zone"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        android:textColor="@color/status_negative" />
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:columnCount="3"
-        android:useDefaultMargins="true">
+        <!-- Row 2: Clear Cache, Clear Data, Uninstall -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearCache"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="@string/action_clear_cache"
+            android:textSize="10sp"
+            app:icon="@drawable/ic_cleaning"
+            app:iconSize="20dp"
+            app:iconGravity="top"
+            app:iconPadding="2dp"
+            style="@style/Widget.Material3.Button.TonalButton" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClearData"
@@ -406,14 +363,14 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:text="@string/action_clear_data"
-            android:textSize="11sp"
-            android:textColor="@color/status_negative"
+            android:textSize="10sp"
+            android:textColor="@color/warning_color"
             app:icon="@drawable/ic_delete_sweep"
-            app:iconSize="18dp"
+            app:iconSize="20dp"
             app:iconGravity="top"
-            app:iconPadding="4dp"
-            app:iconTint="@color/status_negative"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            app:iconPadding="2dp"
+            app:iconTint="@color/warning_color"
+            style="@style/Widget.Material3.Button.TonalButton" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUninstall"
@@ -421,14 +378,41 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:text="@string/action_uninstall"
-            android:textSize="11sp"
+            android:textSize="10sp"
             android:textColor="@color/status_negative"
             app:icon="@drawable/ic_delete"
-            app:iconSize="18dp"
+            app:iconSize="20dp"
             app:iconGravity="top"
-            app:iconPadding="4dp"
+            app:iconPadding="2dp"
             app:iconTint="@color/status_negative"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            style="@style/Widget.Material3.Button.TonalButton" />
+
+        <!-- Row 3: Restrict BG, Allow BG -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRestrictBg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="@string/action_restrict_bg"
+            android:textSize="10sp"
+            app:icon="@drawable/ic_battery_alert"
+            app:iconSize="20dp"
+            app:iconGravity="top"
+            app:iconPadding="2dp"
+            style="@style/Widget.Material3.Button.TonalButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAllowBg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="@string/action_allow_bg"
+            android:textSize="10sp"
+            app:icon="@drawable/ic_check_circle"
+            app:iconSize="20dp"
+            app:iconGravity="top"
+            app:iconPadding="2dp"
+            style="@style/Widget.Material3.Button.TonalButton" />
 
     </GridLayout>
 </LinearLayout>
