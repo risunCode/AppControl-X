@@ -210,9 +210,15 @@ class AppListFragment : Fragment() {
     private fun showAppDetail(app: AppInfo) {
         val bottomSheet = AppDetailBottomSheet.newInstance(app)
         bottomSheet.onActionCompleted = {
-            refreshAppList()
+            // Will refresh when sheet is dismissed
         }
         bottomSheet.show(childFragmentManager, AppDetailBottomSheet.TAG)
+        
+        // Refresh list when sheet is dismissed (after any action)
+        childFragmentManager.executePendingTransactions()
+        bottomSheet.dialog?.setOnDismissListener {
+            refreshAppList()
+        }
     }
     
     private fun setupChips() {
