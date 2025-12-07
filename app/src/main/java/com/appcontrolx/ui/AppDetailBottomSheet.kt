@@ -197,9 +197,7 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
         binding.tvBatteryStatus.text = text
         binding.tvBatteryStatus.setTextColor(resources.getColor(color, null))
         
-        // Update button visibility based on current status
-        binding.btnRestrictBg.visibility = if (currentBgStatus == BackgroundStatus.RESTRICTED) View.GONE else View.VISIBLE
-        binding.btnAllowBg.visibility = if (currentBgStatus == BackgroundStatus.RESTRICTED) View.VISIBLE else View.GONE
+        // Both buttons always visible - no hide/show
     }
     
     private fun setupButtons() {
