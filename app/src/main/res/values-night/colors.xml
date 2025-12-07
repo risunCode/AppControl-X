@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark theme colors -->
+    <color name="primary">#90CAF9</color>
+    <color name="primary_dark">#42A5F5</color>
+    <color name="secondary">#80CBC4</color>
+    <color name="tertiary">#B39DDB</color>
+    <color name="accent">#FF8A65</color>
+    
+    <color name="status_positive">#81C784</color>
+    <color name="status_negative">#E57373</color>
+    <color name="status_neutral">#BDBDBD</color>
+    <color name="status_frozen">#64B5F6</color>
+    
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+    <color name="on_surface">#E0E0E0</color>
+    <color name="on_surface_secondary">#9E9E9E</color>
+    <color name="outline">#424242</color>
+    <color name="warning_color">#FFB74D</color>
+    <color name="warning_bg">#3E2723</color>
+    
+    <!-- Selection -->
+    <color name="selected_bg">#1E3A5F</color>
+    <color name="selected_stroke">#90CAF9</color>
+</resources>
