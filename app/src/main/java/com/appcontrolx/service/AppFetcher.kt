@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import com.appcontrolx.model.AppInfo
+import com.topjohnwu.superuser.Shell
 
 class AppFetcher(private val context: Context) {
     
@@ -45,15 +46,36 @@ class AppFetcher(private val context: Context) {
     private fun getRunningPackages(): Set<String> {
         val running = mutableSetOf<String>()
         
+        // Method 1: Try root command first (most accurate)
         try {
-            // Method 1: runningAppProcesses (limited on Android 10+)
+            if (Shell.isAppGrantedRoot() == true) {
+                val result = Shell.cmd("ps -A -o NAME").exec()
+                if (result.isSuccess) {
+                    result.out.forEach { line ->
+                        val processName = line.trim()
+                        if (processName.isNotEmpty() && processName.contains(".")) {
+                            running.add(processName)
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Root not available, continue with other methods
+        }
+        
+        // Method 2: runningAppProcesses (limited on Android 10+, but still useful)
+        try {
             activityManager.runningAppProcesses?.forEach { process ->
                 process.pkgList?.forEach { pkg ->
                     running.add(pkg)
                 }
             }
-            
-            // Method 2: getRunningServices (deprecated but still works for some cases)
+        } catch (e: Exception) {
+            // Ignore
+        }
+        
+        // Method 3: getRunningServices (deprecated but still works)
+        try {
             @Suppress("DEPRECATION")
             activityManager.getRunningServices(Int.MAX_VALUE)?.forEach { service ->
                 running.add(service.service.packageName)
