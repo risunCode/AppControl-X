@@ -159,15 +159,20 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             // Load detailed background state via root commands
             val (runInBg, runAnyInBg) = withContext(Dispatchers.IO) {
-                if (executor != null) {
-                    val runInBgResult = executor!!.execute("appops get $packageName RUN_IN_BACKGROUND")
-                    val runAnyInBgResult = executor!!.execute("appops get $packageName RUN_ANY_IN_BACKGROUND")
+                val exec = executor
+                if (exec != null) {
+                    val runInBgResult = exec.execute("appops get $packageName RUN_IN_BACKGROUND")
+                    val runAnyInBgResult = exec.execute("appops get $packageName RUN_ANY_IN_BACKGROUND")
+                    
+                    val runInBgOutput = runInBgResult.getOrNull() ?: runInBgResult.exceptionOrNull()?.message ?: ""
+                    val runAnyInBgOutput = runAnyInBgResult.getOrNull() ?: runAnyInBgResult.exceptionOrNull()?.message ?: ""
+                    
                     Pair(
-                        parseAppOpsOutput(runInBgResult.getOrDefault("")),
-                        parseAppOpsOutput(runAnyInBgResult.getOrDefault(""))
+                        parseAppOpsOutput(runInBgOutput),
+                        parseAppOpsOutput(runAnyInBgOutput)
                     )
                 } else {
-                    Pair("N/A", "N/A")
+                    Pair("No Root", "No Root")
                 }
             }
             
@@ -176,12 +181,16 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
     }
     
     private fun parseAppOpsOutput(output: String): String {
+        // Output format: "RUN_IN_BACKGROUND: allow" or "RUN_IN_BACKGROUND: allow; time=..."
+        val lowerOutput = output.lowercase()
         return when {
-            output.contains("ignore") -> "ignore"
-            output.contains("deny") -> "deny"
-            output.contains("allow") -> "allow"
-            output.contains("default") -> "default"
-            else -> "unknown"
+            lowerOutput.contains(": ignore") || lowerOutput.contains(":ignore") -> "ignore"
+            lowerOutput.contains(": deny") || lowerOutput.contains(":deny") -> "deny"
+            lowerOutput.contains(": allow") || lowerOutput.contains(":allow") -> "allow"
+            lowerOutput.contains(": default") || lowerOutput.contains(":default") -> "default"
+            lowerOutput.contains("no operations") -> "default"
+            output.isBlank() -> "error"
+            else -> output.trim().take(20) // Show raw output for debug
         }
     }
     
