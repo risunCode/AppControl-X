@@ -46,7 +46,6 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         setupTheme()
-        setupLanguage()
         setupCurrentMode()
         setupSafetySettings()
         setupRollbackSettings()
