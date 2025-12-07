@@ -3,6 +3,7 @@ package com.appcontrolx
 import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.preference.PreferenceManager
 import com.appcontrolx.utils.Constants
 import com.topjohnwu.superuser.Shell
@@ -44,6 +45,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         applyTheme()
+        applyLanguage()
         Log.d(TAG, "App initialized")
     }
     
@@ -51,5 +53,18 @@ class App : Application() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val theme = prefs.getInt(Constants.PREFS_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         AppCompatDelegate.setDefaultNightMode(theme)
+    }
+    
+    private fun applyLanguage() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val langCode = prefs.getString(Constants.PREFS_LANGUAGE, "system") ?: "system"
+        
+        val localeList = when (langCode) {
+            "en" -> LocaleListCompat.forLanguageTags("en")
+            "id" -> LocaleListCompat.forLanguageTags("id")
+            else -> LocaleListCompat.getEmptyLocaleList()
+        }
+        
+        AppCompatDelegate.setApplicationLocales(localeList)
     }
 }

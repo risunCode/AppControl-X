@@ -101,10 +101,9 @@ class SettingsFragment : Fragment() {
             )
             val languageCodes = arrayOf("system", "en", "id")
             
-            // Get current from AppCompatDelegate
-            val currentLocales = AppCompatDelegate.getApplicationLocales()
-            val currentLang = if (currentLocales.isEmpty) "system" else currentLocales.toLanguageTags().split("-")[0]
-            val currentIndex = languageCodes.indexOf(currentLang).coerceAtLeast(0)
+            // Get current from prefs (more reliable)
+            val savedLang = prefs.getString(Constants.PREFS_LANGUAGE, "system") ?: "system"
+            val currentIndex = languageCodes.indexOf(savedLang).coerceAtLeast(0)
             
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.settings_language)
@@ -119,8 +118,10 @@ class SettingsFragment : Fragment() {
     }
     
     private fun updateLanguageText() {
+        // Check from prefs first (more reliable), then AppCompatDelegate
+        val savedLang = prefs.getString(Constants.PREFS_LANGUAGE, null)
         val currentLocales = AppCompatDelegate.getApplicationLocales()
-        val langTag = if (currentLocales.isEmpty) "system" else currentLocales.toLanguageTags()
+        val langTag = savedLang ?: if (currentLocales.isEmpty) "system" else currentLocales.toLanguageTags()
         
         binding.tvCurrentLanguage.text = when {
             langTag.startsWith("en") -> getString(R.string.language_english)
@@ -130,6 +131,9 @@ class SettingsFragment : Fragment() {
     }
     
     private fun applyLanguage(langCode: String) {
+        // Save to prefs for persistence
+        prefs.edit().putString(Constants.PREFS_LANGUAGE, langCode).apply()
+        
         // Use AppCompatDelegate for proper locale handling (Android 13+ compatible)
         val localeList = when (langCode) {
             "en" -> LocaleListCompat.forLanguageTags("en")
@@ -138,7 +142,11 @@ class SettingsFragment : Fragment() {
         }
         
         AppCompatDelegate.setApplicationLocales(localeList)
-        // Activity will recreate automatically, no need for manual restart
+        
+        // For older Android versions, we need to restart the app
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.TIRAMISU) {
+            restartApp()
+        }
     }
     
     private fun setupCurrentMode() {
