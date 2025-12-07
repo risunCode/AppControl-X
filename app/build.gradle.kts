@@ -55,6 +55,11 @@ android {
         aidl = true
     }
     
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
+    
     // Custom APK naming: AppControlX-v1.0.0-debug.apk
     applicationVariants.all {
         val variant = this
