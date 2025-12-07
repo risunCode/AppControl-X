@@ -5,16 +5,28 @@
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
 
-# Keep Shizuku
+# Keep Shizuku (critical for release builds)
 -keep class rikka.shizuku.** { *; }
 -keep class moe.shizuku.** { *; }
+-keepclassmembers class * implements android.os.IInterface {
+    public *;
+}
 
 # Keep libsu
 -keep class com.topjohnwu.superuser.** { *; }
 
-# Keep AIDL
+# Keep AIDL interfaces
 -keep class com.appcontrolx.IShellService { *; }
 -keep class com.appcontrolx.IShellService$* { *; }
+-keep class * extends android.os.Binder { *; }
+
+# Keep Shizuku UserService
+-keep class com.appcontrolx.executor.ShellService { *; }
+-keep class com.appcontrolx.executor.ShizukuExecutor { *; }
+-keep class com.appcontrolx.executor.ShizukuExecutor$* { *; }
+
+# Keep all executors
+-keep class com.appcontrolx.executor.** { *; }
 
 # Keep Models
 -keep class com.appcontrolx.model.** { *; }
