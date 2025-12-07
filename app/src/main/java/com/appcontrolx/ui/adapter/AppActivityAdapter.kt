@@ -1,12 +1,18 @@
 package com.appcontrolx.ui.adapter
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.appcontrolx.R
 import com.appcontrolx.databinding.ItemAppActivityGroupBinding
 import com.appcontrolx.databinding.ItemActivitySimpleBinding
 import com.appcontrolx.ui.ActivityLauncherBottomSheet.ActivityItem
@@ -42,25 +48,19 @@ class AppActivityAdapter(
         }
         
         fun bind(group: AppActivityGroup) {
-            // App icon
             if (group.appIcon != null) {
                 binding.ivAppIcon.setImageDrawable(group.appIcon)
             }
             
             binding.tvAppName.text = group.appName
             binding.tvActivityCount.text = "${group.activities.size} activities"
-            
-            // Expand/collapse icon
             binding.ivExpand.rotation = if (group.isExpanded) 180f else 0f
-            
-            // Activities list visibility
             binding.rvActivities.visibility = if (group.isExpanded) View.VISIBLE else View.GONE
             
             if (group.isExpanded) {
                 activityAdapter.submitList(group.activities)
             }
             
-            // Click to expand/collapse
             binding.headerLayout.setOnClickListener {
                 onAppClick(group)
             }
@@ -68,14 +68,11 @@ class AppActivityAdapter(
     }
     
     class DiffCallback : DiffUtil.ItemCallback<AppActivityGroup>() {
-        override fun areItemsTheSame(oldItem: AppActivityGroup, newItem: AppActivityGroup): Boolean {
-            return oldItem.packageName == newItem.packageName
-        }
+        override fun areItemsTheSame(oldItem: AppActivityGroup, newItem: AppActivityGroup) =
+            oldItem.packageName == newItem.packageName
         
-        override fun areContentsTheSame(oldItem: AppActivityGroup, newItem: AppActivityGroup): Boolean {
-            return oldItem.packageName == newItem.packageName && 
-                   oldItem.isExpanded == newItem.isExpanded
-        }
+        override fun areContentsTheSame(oldItem: AppActivityGroup, newItem: AppActivityGroup) =
+            oldItem.packageName == newItem.packageName && oldItem.isExpanded == newItem.isExpanded
     }
 }
 
@@ -99,28 +96,35 @@ class ActivitySimpleAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         
         fun bind(item: ActivityItem) {
-            // Show activity short name (e.g., "ManageExternalSourcesActivity")
             binding.tvActivityName.text = item.shortName
             
-            // Show full path (e.g., "com.android.settings$ManageExternalSourcesActivity")
-            val fullPath = "${item.packageName}\$${item.shortName}"
+            // Full activity path (e.g., com.android.settings/.Settings$ManageExternalSourcesActivity)
+            val fullPath = item.activityName
             binding.tvFullPath.text = fullPath
             
             binding.tvExported.visibility = if (item.isExported) View.VISIBLE else View.GONE
             
+            // Tap to launch
             binding.root.setOnClickListener {
                 onItemClick(item)
+            }
+            
+            // Long press to copy full path
+            binding.root.setOnLongClickListener { view ->
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                val clipboard = view.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                clipboard.setPrimaryClip(ClipData.newPlainText("Activity", fullPath))
+                Toast.makeText(view.context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
+                true
             }
         }
     }
     
     class DiffCallback : DiffUtil.ItemCallback<ActivityItem>() {
-        override fun areItemsTheSame(oldItem: ActivityItem, newItem: ActivityItem): Boolean {
-            return oldItem.activityName == newItem.activityName
-        }
+        override fun areItemsTheSame(oldItem: ActivityItem, newItem: ActivityItem) =
+            oldItem.activityName == newItem.activityName
         
-        override fun areContentsTheSame(oldItem: ActivityItem, newItem: ActivityItem): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: ActivityItem, newItem: ActivityItem) =
+            oldItem == newItem
     }
 }
