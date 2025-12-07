@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppControlX</string>
+    
+    <!-- Status -->
+    <string name="status_available">Tersedia</string>
+    <string name="status_not_available">Tidak tersedia</string>
+    <string name="status_running">Berjalan</string>
+    <string name="status_not_running">Tidak berjalan</string>
+    <string name="status_granted">Diberikan</string>
+    <string name="status_not_granted">Belum diberikan</string>
+    <string name="status_granted_auto">Diberikan (dari manifest)</string>
+    <string name="status_access_granted">Akses Diberikan</string>
+    
+    <!-- Mode -->
+    <string name="mode_root">Mode Root</string>
+    <string name="mode_root_desc">Akses sistem penuh. Bisa freeze, uninstall, dan kontrol aplikasi apapun. Membutuhkan perangkat root dengan Magisk atau sejenisnya.</string>
+    <string name="mode_shizuku">Mode Shizuku</string>
+    <string name="mode_shizuku_desc">Akses level ADB tanpa root. Membutuhkan aplikasi Shizuku berjalan. Beberapa fitur mungkin terbatas.</string>
+    <string name="mode_view_only">Mode Lihat Saja</string>
+    <string name="mode_view_only_desc">Hanya melihat aplikasi terinstal. Tidak ada fitur kontrol. Bagus untuk menjelajahi aplikasi.</string>
+    
+    <!-- Setup -->
+    <string name="setup_welcome">Selamat Datang di AppControlX</string>
+    <string name="setup_permissions_title">Pengaturan</string>
+    <string name="setup_permissions_desc">Berikan izin dan pilih mode eksekusi</string>
+    <string name="setup_permissions_section">Izin</string>
+    <string name="setup_mode_section">Mode Eksekusi</string>
+    <string name="permission_notification">Notifikasi</string>
+    <string name="permission_query_apps">Query Aplikasi Terinstal</string>
+    
+    <!-- Disclaimer -->
+    <string name="disclaimer_title">Peringatan Penting</string>
+    <string name="disclaimer_warning_title">Gunakan dengan Risiko Sendiri</string>
+    <string name="disclaimer_warning_text">Aplikasi ini menyediakan kontrol sistem yang kuat yang dapat mempengaruhi fungsi perangkat Anda secara signifikan. Penggunaan yang tidak tepat dapat menyebabkan aplikasi tidak berfungsi, kehilangan data, atau ketidakstabilan sistem.</string>
+    <string name="disclaimer_agree">Saya memahami risiko dan menerima tanggung jawab penuh atas segala konsekuensi</string>
+    <string name="disclaimer_accept">Saya Setuju &amp; Lanjutkan</string>
+    
+    <!-- Navigation -->
+    <string name="nav_apps">Aplikasi</string>
+    <string name="nav_settings">Pengaturan</string>
+    <string name="nav_about">Tentang</string>
+    <string name="nav_tools">Alat</string>
+    
+    <!-- Buttons -->
+    <string name="btn_continue">Lanjutkan</string>
+    <string name="btn_check">Periksa</string>
+    <string name="btn_checking">Memeriksa...</string>
+    <string name="btn_grant">Berikan</string>
+    <string name="btn_select_all">Pilih Semua</string>
+    <string name="btn_deselect_all">Batal Pilih</string>
+    <string name="btn_retry">Coba Lagi</string>
+    <string name="btn_close">Tutup</string>
+    <string name="btn_cancel">Batal</string>
+    <string name="root_granted">Akses root diberikan!</string>
+    <string name="root_denied">Akses root ditolak</string>
+    
+    <!-- Actions -->
+    <string name="action_freeze">Bekukan</string>
+    <string name="action_unfreeze">Aktifkan</string>
+    <string name="action_uninstall">Hapus</string>
+    <string name="action_force_stop">Paksa Berhenti</string>
+    <string name="action_restrict_bg">Batasi Latar Belakang</string>
+    <string name="action_allow_bg">Izinkan Latar Belakang</string>
+    <string name="action_clear_cache">Hapus Cache</string>
+    <string name="action_clear_data">Hapus Data</string>
+    <string name="action_execute">Jalankan</string>
+    <string name="action_launch">Buka</string>
+    
+    <!-- App List -->
+    <string name="chip_user_apps">Aplikasi User</string>
+    <string name="chip_system_apps">Aplikasi Sistem</string>
+    <string name="selected_count">%d dipilih</string>
+    <string name="app_count">%d aplikasi</string>
+    <string name="search_apps_hint">Cari aplikasi...</string>
+    <string name="search_no_results">Tidak ada aplikasi ditemukan</string>
+    
+    <!-- Settings -->
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_desc">Pilih tema aplikasi</string>
+    <string name="theme_system">Ikuti Sistem</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="settings_safety">Keamanan</string>
+    <string name="settings_confirm_actions">Konfirmasi Aksi</string>
+    <string name="settings_confirm_actions_desc">Tampilkan konfirmasi sebelum menjalankan aksi</string>
+    <string name="settings_protect_system">Lindungi Aplikasi Sistem</string>
+    <string name="settings_protect_system_desc">Cegah aksi pada aplikasi sistem kritis</string>
+    
+    <!-- Batch -->
+    <string name="batch_waiting">Menunggu untuk mulai...</string>
+    <string name="batch_countdown">Mulai dalam %d...</string>
+    <string name="batch_progress">%1$d / %2$d</string>
+    <string name="batch_completed">Selesai</string>
+    <string name="batch_all_success">Semua %d aplikasi berhasil diproses</string>
+    <string name="batch_partial_success">%1$d berhasil, %2$d gagal</string>
+    
+    <!-- About -->
+    <string name="about_tagline">Kontrol aplikasi, hemat baterai</string>
+    <string name="about_system_title">Info Perangkat</string>
+    <string name="about_device">Perangkat</string>
+    <string name="about_android">Android</string>
+    <string name="about_links_title">Tautan</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_github_desc">Lihat kode sumber dan berkontribusi</string>
+    <string name="about_share_app">Bagikan AppControlX</string>
+    <string name="about_rate">Beri Bintang di GitHub</string>
+    <string name="about_rate_desc">Dukung proyek dengan bintang</string>
+    <string name="about_bug_report">Laporkan Bug</string>
+    <string name="about_bug_desc">Menemukan masalah? Beritahu kami</string>
+    <string name="about_credits">Dibuat dengan cinta oleh risunCode</string>
+    <string name="stat_user_apps">Aplikasi User</string>
+    <string name="stat_system_apps">Aplikasi Sistem</string>
+    <string name="stat_actions">Aksi</string>
+    
+    <!-- Errors -->
+    <string name="error_mode_required_title">Mode Diperlukan</string>
+    <string name="error_mode_required_message">Mode Root atau Shizuku diperlukan untuk menjalankan aksi. Silakan konfigurasi di Pengaturan.</string>
+    <string name="error_root_not_available">Akses root tidak tersedia. Silakan berikan izin root.</string>
+    <string name="error_shizuku_not_available">Shizuku tidak tersedia. Silakan jalankan aplikasi Shizuku terlebih dahulu.</string>
+    <string name="error_open_settings">Tidak dapat membuka pengaturan</string>
+    
+    <!-- Status Badges -->
+    <string name="badge_frozen">DIBEKUKAN</string>
+    <string name="badge_running">BERJALAN</string>
+    <string name="badge_stopped">BERHENTI</string>
+    <string name="badge_restricted">DIBATASI</string>
+    
+    <!-- Log -->
+    <string name="log_status_success">Berhasil</string>
+    <string name="log_status_failed">Gagal</string>
+    
+    <!-- Warnings -->
+    <string name="warning_title">Peringatan</string>
+    <string name="confirm_yes">Ya</string>
+    <string name="confirm_no">Tidak</string>
+</resources>
