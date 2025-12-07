@@ -57,8 +57,9 @@ class AppFetcher(private val context: Context) {
     private fun isBackgroundRestricted(packageName: String, uid: Int): Boolean {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                // RUN_IN_BACKGROUND is hidden API, use string directly
                 val mode = appOpsManager.unsafeCheckOpNoThrow(
-                    AppOpsManager.OPSTR_RUN_IN_BACKGROUND,
+                    "android:run_in_background",
                     uid,
                     packageName
                 )
