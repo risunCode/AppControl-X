@@ -255,6 +255,10 @@
     <string name="tools_activity_launcher_desc">Launch hidden activities from any app</string>
     <string name="tools_activity_count">%d activities</string>
     <string name="tools_activity_launch_failed">Failed to launch activity</string>
+    <string name="activity_launcher_subtitle">Tap app to expand, tap activity to launch</string>
+    <string name="activity_launcher_count">%1$d apps • %2$d activities</string>
+    <string name="search_hint">Search apps or activities…</string>
+    <string name="btn_expand">Expand</string>
     <string name="tools_not_available">This setting is not available on your device</string>
     <string name="tools_navigate_manually">Please navigate manually in Settings</string>
     

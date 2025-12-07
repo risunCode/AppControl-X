@@ -14,28 +14,36 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appcontrolx.R
 import com.appcontrolx.databinding.BottomSheetActivityLauncherBinding
-import com.appcontrolx.ui.adapter.ActivityListAdapter
+import com.appcontrolx.ui.adapter.AppActivityAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
     
     private var _binding: BottomSheetActivityLauncherBinding? = null
     private val binding get() = _binding
     
-    private lateinit var adapter: ActivityListAdapter
-    private var allActivities: List<ActivityItem> = emptyList()
+    private lateinit var adapter: AppActivityAdapter
+    private var allAppGroups: List<AppActivityGroup> = emptyList()
     private var showSystemApps = false
     
     data class ActivityItem(
         val packageName: String,
         val activityName: String,
+        val shortName: String,
+        val isExported: Boolean
+    )
+    
+    data class AppActivityGroup(
+        val packageName: String,
         val appName: String,
         val appIcon: Drawable?,
         val isSystem: Boolean,
-        val isExported: Boolean
+        val activities: List<ActivityItem>,
+        var isExpanded: Boolean = false
     )
     
     companion object {
@@ -52,16 +60,32 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupChips()
+        setupSearch()
         loadActivities()
     }
     
     private fun setupRecyclerView() {
         val b = binding ?: return
-        adapter = ActivityListAdapter { activity ->
-            launchActivity(activity)
-        }
+        adapter = AppActivityAdapter(
+            onAppClick = { group ->
+                toggleExpand(group)
+            },
+            onActivityClick = { activity ->
+                launchActivity(activity)
+            }
+        )
         b.recyclerView.layoutManager = LinearLayoutManager(context)
         b.recyclerView.adapter = adapter
+    }
+    
+    private fun toggleExpand(group: AppActivityGroup) {
+        val index = allAppGroups.indexOfFirst { it.packageName == group.packageName }
+        if (index >= 0) {
+            allAppGroups = allAppGroups.toMutableList().apply {
+                this[index] = this[index].copy(isExpanded = !this[index].isExpanded)
+            }
+            filterActivities()
+        }
     }
     
     private fun setupChips() {
@@ -83,43 +107,61 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
         }
     }
     
+    private fun setupSearch() {
+        val b = binding ?: return
+        b.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = false
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterActivities(newText)
+                return true
+            }
+        })
+    }
+    
     private fun loadActivities() {
         val b = binding ?: return
         b.progressBar.visibility = View.VISIBLE
         
         lifecycleScope.launch {
-            allActivities = withContext(Dispatchers.IO) {
+            allAppGroups = withContext(Dispatchers.IO) {
                 val pm = requireContext().packageManager
                 val packages = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES)
                 
-                packages.flatMap { pkg ->
+                packages.mapNotNull { pkg ->
                     val isSystem = (pkg.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
                     val appName = pkg.applicationInfo.loadLabel(pm).toString()
                     val appIcon = try { pkg.applicationInfo.loadIcon(pm) } catch (e: Exception) { null }
                     
-                    pkg.activities?.mapNotNull { activity ->
-                        // Only include valid launchable activities
+                    val activities = pkg.activities?.mapNotNull { activity ->
                         if (isValidActivity(activity)) {
                             ActivityItem(
                                 packageName = pkg.packageName,
                                 activityName = activity.name,
-                                appName = appName,
-                                appIcon = appIcon,
-                                isSystem = isSystem,
+                                shortName = activity.name.substringAfterLast("."),
                                 isExported = activity.exported
                             )
                         } else null
                     } ?: emptyList()
+                    
+                    if (activities.isNotEmpty()) {
+                        AppActivityGroup(
+                            packageName = pkg.packageName,
+                            appName = appName,
+                            appIcon = appIcon,
+                            isSystem = isSystem,
+                            activities = activities.sortedBy { it.shortName.lowercase() }
+                        )
+                    } else null
                 }.sortedBy { it.appName.lowercase() }
             }
             
             b.progressBar.visibility = View.GONE
+            Timber.d("Loaded ${allAppGroups.size} apps with activities")
             filterActivities()
         }
     }
     
     private fun isValidActivity(activity: ActivityInfo): Boolean {
-        // Filter out invalid/internal activities
         val name = activity.name.lowercase()
         
         // Skip internal/test activities
@@ -127,19 +169,31 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
             return false
         }
         
-        // Skip activities that are clearly not meant to be launched
+        // Skip non-activity components
         if (name.endsWith("receiver") || name.endsWith("service") || name.endsWith("provider")) {
             return false
         }
         
-        // Prefer exported activities or activities with a label
         return activity.exported || activity.labelRes != 0
     }
     
-    private fun filterActivities() {
-        val filtered = allActivities.filter { it.isSystem == showSystemApps }
+    private fun filterActivities(searchQuery: String? = null) {
+        var filtered = allAppGroups.filter { it.isSystem == showSystemApps }
+        
+        // Apply search filter
+        if (!searchQuery.isNullOrBlank()) {
+            val query = searchQuery.lowercase()
+            filtered = filtered.filter { group ->
+                group.appName.lowercase().contains(query) ||
+                group.packageName.lowercase().contains(query) ||
+                group.activities.any { it.shortName.lowercase().contains(query) }
+            }
+        }
+        
         adapter.submitList(filtered)
-        binding?.tvCount?.text = getString(R.string.tools_activity_count, filtered.size)
+        
+        val totalActivities = filtered.sumOf { it.activities.size }
+        binding?.tvCount?.text = getString(R.string.activity_launcher_count, filtered.size, totalActivities)
     }
     
     private fun launchActivity(activity: ActivityItem) {
@@ -149,7 +203,9 @@ class ActivityLauncherBottomSheet : BottomSheetDialogFragment() {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
+            Timber.d("Launched activity: ${activity.activityName}")
         } catch (e: Exception) {
+            Timber.e(e, "Failed to launch activity: ${activity.activityName}")
             Toast.makeText(context, R.string.tools_activity_launch_failed, Toast.LENGTH_SHORT).show()
         }
     }

@@ -87,4 +87,14 @@ class BatteryPolicyManager(private val executor: CommandExecutor) {
         }
         return executor.execute("pm uninstall -k --user 0 $packageName").map { }
     }
+    
+    fun clearCache(packageName: String): Result<Unit> {
+        validatePackageName(packageName).onFailure { return Result.failure(it) }
+        return executor.execute("pm clear --cache-only $packageName").map { }
+    }
+    
+    fun clearData(packageName: String): Result<Unit> {
+        validatePackageName(packageName).onFailure { return Result.failure(it) }
+        return executor.execute("pm clear $packageName").map { }
+    }
 }
