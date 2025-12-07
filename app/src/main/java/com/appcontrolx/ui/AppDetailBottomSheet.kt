@@ -255,7 +255,44 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
             }
         }
         
+        binding.btnClearCache.setOnClickListener {
+            if (isCritical) { showProtectedWarning(); return@setOnClickListener }
+            executeActionWithLoading(getString(R.string.action_clear_cache)) {
+                executor?.execute("pm clear --cache-only ${appInfo!!.packageName}")
+            }
+        }
+        
+        binding.btnClearData.setOnClickListener {
+            if (isCritical) { showProtectedWarning(); return@setOnClickListener }
+            executeActionWithLoading(getString(R.string.action_clear_data)) {
+                executor?.execute("pm clear ${appInfo!!.packageName}")
+            }
+        }
+        
+        binding.btnLaunchApp.setOnClickListener {
+            launchApp()
+        }
+        
         binding.btnOpenSettings.setOnClickListener { openAppSettings() }
+        
+        // Enable/disable buttons based on mode
+        binding.btnClearCache.isEnabled = hasMode && !isCritical
+        binding.btnClearData.isEnabled = hasMode && !isCritical
+        binding.btnLaunchApp.isEnabled = true // Always enabled
+    }
+    
+    private fun launchApp() {
+        val packageName = appInfo?.packageName ?: return
+        try {
+            val intent = requireContext().packageManager.getLaunchIntentForPackage(packageName)
+            if (intent != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(context, R.string.error_no_launcher, Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, R.string.error_launch_failed, Toast.LENGTH_SHORT).show()
+        }
     }
     
     private fun showProtectedWarning() {
@@ -304,6 +341,9 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
         binding.btnToggleEnable.isEnabled = enabled
         binding.btnToggleBackground.isEnabled = enabled
         binding.btnUninstall.isEnabled = enabled
+        binding.btnClearCache.isEnabled = enabled
+        binding.btnClearData.isEnabled = enabled
+        binding.btnLaunchApp.isEnabled = enabled
         binding.btnOpenSettings.isEnabled = enabled
     }
     

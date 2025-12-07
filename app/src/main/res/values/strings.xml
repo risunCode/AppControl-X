@@ -280,6 +280,13 @@
     <!-- What\'s New -->
     <string name="whats_new_title">What\'s New in v%s</string>
     
+    <!-- Quick Actions -->
+    <string name="action_clear_cache">Clear Cache</string>
+    <string name="action_clear_data">Clear Data</string>
+    <string name="action_launch">Launch</string>
+    <string name="error_no_launcher">App has no launcher activity</string>
+    <string name="error_launch_failed">Failed to launch app</string>
+    
     <!-- Batch Progress -->
     <string name="batch_progress">%1$d / %2$d</string>
     <string name="batch_preparing">Preparing…</string>

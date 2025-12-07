@@ -283,6 +283,7 @@
         android:textStyle="bold"
         android:textSize="14sp" />
 
+    <!-- Row 1: Force Stop, Freeze/Unfreeze -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -305,6 +306,7 @@
             style="@style/Widget.Material3.Button.OutlinedButton" />
     </LinearLayout>
 
+    <!-- Row 2: Background, Uninstall -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -328,11 +330,50 @@
             style="@style/Widget.Material3.Button.OutlinedButton" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnOpenSettings"
+    <!-- Row 3: Clear Cache, Clear Data -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="@string/detail_open_settings"
-        style="@style/Widget.Material3.Button.TonalButton" />
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnClearCache"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_clear_cache"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+        <Button
+            android:id="@+id/btnClearData"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/action_clear_data"
+            android:textColor="@color/warning_color"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+    </LinearLayout>
+
+    <!-- Row 4: Launch, Open Settings -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnLaunchApp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/action_launch"
+            style="@style/Widget.Material3.Button.TonalButton" />
+        <Button
+            android:id="@+id/btnOpenSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/detail_open_settings"
+            style="@style/Widget.Material3.Button.TonalButton" />
+    </LinearLayout>
 </LinearLayout>
