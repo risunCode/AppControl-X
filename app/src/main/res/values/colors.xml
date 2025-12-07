@@ -12,4 +12,5 @@
     <color name="surface">#FFFFFF</color>
     <color name="on_surface">#212121</color>
     <color name="on_surface_secondary">#757575</color>
+    <color name="outline">#E0E0E0</color>
 </resources>

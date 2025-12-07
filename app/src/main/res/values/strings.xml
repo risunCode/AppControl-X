@@ -72,4 +72,32 @@
     <string name="confirm_uninstall">Are you sure you want to uninstall these apps?</string>
     <string name="confirm_yes">Yes</string>
     <string name="confirm_no">No</string>
+    
+    <!-- Settings -->
+    <string name="settings_execution">Execution</string>
+    <string name="settings_current_mode">Current Mode</string>
+    <string name="settings_change">Change</string>
+    <string name="settings_change_mode_title">Change Mode</string>
+    <string name="settings_change_mode_message">This will restart the setup wizard. Continue?</string>
+    <string name="settings_safety">Safety</string>
+    <string name="settings_confirm_actions">Confirm Actions</string>
+    <string name="settings_confirm_actions_desc">Show confirmation before executing actions</string>
+    <string name="settings_protect_system">Protect System Apps</string>
+    <string name="settings_protect_system_desc">Prevent actions on critical system apps</string>
+    <string name="settings_rollback">Rollback</string>
+    <string name="settings_auto_snapshot">Auto Snapshot</string>
+    <string name="settings_auto_snapshot_desc">Save app state before actions</string>
+    <string name="settings_clear_snapshots">Clear Snapshots</string>
+    <string name="settings_clear_snapshots_confirm">Delete all saved snapshots?</string>
+    <string name="settings_snapshot_count">%d snapshots saved</string>
+    <string name="settings_snapshots_cleared">Snapshots cleared</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_reset_setup">Reset Setup</string>
+    <string name="settings_reset_setup_desc">Restart the setup wizard</string>
+    <string name="settings_reset_setup_confirm">This will reset all settings and restart setup. Continue?</string>
+    
+    <!-- About -->
+    <string name="about_description">Control your apps, save your battery</string>
+    <string name="about_current_mode">Current Mode</string>
+    <string name="about_license">Licensed under GPL-3.0</string>
 </resources>
