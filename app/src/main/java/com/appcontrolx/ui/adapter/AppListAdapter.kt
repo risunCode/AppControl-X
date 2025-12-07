@@ -70,12 +70,17 @@ class AppListAdapter(
                 checkbox.setOnCheckedChangeListener(null)
                 checkbox.isChecked = selectedPackages.contains(app.packageName)
                 
-                // Disabled/Frozen state
-                root.alpha = if (app.isEnabled) 1f else 0.5f
+                // Disabled/Frozen state - dim the item
+                root.alpha = if (app.isEnabled) 1f else 0.6f
                 
                 // Status badges
-                tvStatusDisabled.visibility = if (!app.isEnabled) View.VISIBLE else View.GONE
-                statusContainer.visibility = if (!app.isEnabled) View.VISIBLE else View.GONE
+                val hasAnyBadge = app.isFrozen || app.isRunning || app.isStopped || app.isBackgroundRestricted
+                statusContainer.visibility = if (hasAnyBadge) View.VISIBLE else View.GONE
+                
+                tvStatusFrozen.visibility = if (app.isFrozen) View.VISIBLE else View.GONE
+                tvStatusRunning.visibility = if (app.isRunning && !app.isFrozen) View.VISIBLE else View.GONE
+                tvStatusStopped.visibility = if (app.isStopped && !app.isFrozen && !app.isRunning) View.VISIBLE else View.GONE
+                tvStatusRestricted.visibility = if (app.isBackgroundRestricted) View.VISIBLE else View.GONE
                 
                 checkbox.setOnCheckedChangeListener { _, _ ->
                     toggleSelection(app.packageName)

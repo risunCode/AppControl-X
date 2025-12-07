@@ -44,38 +44,62 @@
             android:maxLines="1"
             android:ellipsize="end" />
 
-        <LinearLayout
+        <com.google.android.material.chip.ChipGroup
             android:id="@+id/statusContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvStatusDisabled"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/status_disabled"
-                android:textSize="10sp"
-                android:textColor="@android:color/white"
-                android:background="@color/status_negative"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp"
-                android:visibility="gone" />
+            app:singleLine="true"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
 
             <TextView
                 android:id="@+id/tvStatusFrozen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/status_frozen"
-                android:textSize="10sp"
+                android:text="@string/badge_frozen"
+                android:textSize="9sp"
                 android:textColor="@android:color/white"
-                android:background="@color/status_frozen"
+                android:background="@drawable/badge_frozen"
                 android:paddingHorizontal="6dp"
                 android:paddingVertical="2dp"
-                android:layout_marginStart="4dp"
                 android:visibility="gone" />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvStatusRunning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/badge_running"
+                android:textSize="9sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/badge_running"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvStatusStopped"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/badge_stopped"
+                android:textSize="9sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/badge_stopped"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvStatusRestricted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/badge_restricted"
+                android:textSize="9sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/badge_restricted"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:visibility="gone" />
+        </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
     <ImageButton

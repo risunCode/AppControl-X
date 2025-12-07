@@ -48,6 +48,9 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
         private const val ARG_APP_NAME = "app_name"
         private const val ARG_IS_ENABLED = "is_enabled"
         private const val ARG_IS_SYSTEM = "is_system"
+        private const val ARG_IS_RUNNING = "is_running"
+        private const val ARG_IS_STOPPED = "is_stopped"
+        private const val ARG_IS_BG_RESTRICTED = "is_bg_restricted"
         
         fun newInstance(app: AppInfo): AppDetailBottomSheet {
             return AppDetailBottomSheet().apply {
@@ -56,6 +59,9 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
                     putString(ARG_APP_NAME, app.appName)
                     putBoolean(ARG_IS_ENABLED, app.isEnabled)
                     putBoolean(ARG_IS_SYSTEM, app.isSystemApp)
+                    putBoolean(ARG_IS_RUNNING, app.isRunning)
+                    putBoolean(ARG_IS_STOPPED, app.isStopped)
+                    putBoolean(ARG_IS_BG_RESTRICTED, app.isBackgroundRestricted)
                 }
             }
         }
@@ -76,7 +82,7 @@ class AppDetailBottomSheet : BottomSheetDialogFragment() {
     }
     
     private fun setupExecutor() {
-        executionMode = PermissionBridge().detectMode()
+        executionMode = PermissionBridge(requireContext()).detectMode()
         if (executionMode is ExecutionMode.Root) {
             executor = RootExecutor()
             policyManager = BatteryPolicyManager(executor!!)
