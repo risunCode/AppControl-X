@@ -58,6 +58,7 @@ android {
     lint {
         abortOnError = false
         checkReleaseBuilds = false
+        disable += "QueryAllPackagesPermission"
     }
     
     // Custom APK naming: AppControlX-v1.0.0-debug.apk
