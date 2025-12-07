@@ -100,4 +100,39 @@
     <string name="about_description">Control your apps, save your battery</string>
     <string name="about_current_mode">Current Mode</string>
     <string name="about_license">Licensed under GPL-3.0</string>
+    
+    <!-- App List -->
+    <string name="chip_user_apps">User Apps</string>
+    <string name="chip_system_apps">System Apps</string>
+    <string name="btn_select_all">Select All</string>
+    <string name="btn_deselect_all">Deselect All</string>
+    <string name="btn_retry">Retry</string>
+    <string name="selected_count">%d selected</string>
+    <string name="app_count">%d apps</string>
+    <string name="action_execute">Execute</string>
+    <string name="mode_required">Mode Required</string>
+    
+    <!-- Errors -->
+    <string name="error_mode_required_title">Mode Required</string>
+    <string name="error_mode_required_message">Root or Shizuku mode is required to perform actions. Please configure in Settings.</string>
+    <string name="error_timeout_title">Timeout</string>
+    <string name="error_timeout_message">Operation timed out. Please try again.</string>
+    <string name="error_load_timeout_message">Failed to load apps. Please try again.</string>
+    <string name="error_action_title">Action Failed</string>
+    <string name="error_load_title">Load Failed</string>
+    <string name="error_unknown">Unknown error occurred</string>
+    <string name="error_blocked_title">Blocked</string>
+    <string name="error_blocked_message">Cannot perform action on critical system apps:\n%s</string>
+    <string name="warning_title">Warning</string>
+    <string name="warning_system_apps">The following apps may affect system functionality:\n%s\n\nProceed anyway?</string>
+    <string name="empty_no_apps_title">No Apps</string>
+    <string name="empty_no_apps_message">No apps found in this category</string>
+    
+    <!-- Settings Theme -->
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_desc">Choose app theme</string>
+    <string name="theme_system">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 </resources>

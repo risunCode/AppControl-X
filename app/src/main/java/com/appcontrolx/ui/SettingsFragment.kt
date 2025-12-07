@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.appcontrolx.R
@@ -23,6 +24,12 @@ class SettingsFragment : Fragment() {
     
     private val prefs by lazy { PreferenceManager.getDefaultSharedPreferences(requireContext()) }
     
+    private val themeOptions = arrayOf(
+        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+        AppCompatDelegate.MODE_NIGHT_NO,
+        AppCompatDelegate.MODE_NIGHT_YES
+    )
+    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -31,10 +38,47 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        setupTheme()
         setupCurrentMode()
         setupSafetySettings()
         setupRollbackSettings()
         setupDataSettings()
+    }
+    
+    private fun setupTheme() {
+        updateThemeText()
+        
+        binding.itemTheme.setOnClickListener {
+            val currentTheme = prefs.getInt(Constants.PREFS_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            val currentIndex = themeOptions.indexOf(currentTheme).coerceAtLeast(0)
+            
+            val themeNames = arrayOf(
+                getString(R.string.theme_system),
+                getString(R.string.theme_light),
+                getString(R.string.theme_dark)
+            )
+            
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.settings_theme)
+                .setSingleChoiceItems(themeNames, currentIndex) { dialog, which ->
+                    val selectedTheme = themeOptions[which]
+                    prefs.edit().putInt(Constants.PREFS_THEME, selectedTheme).apply()
+                    AppCompatDelegate.setDefaultNightMode(selectedTheme)
+                    updateThemeText()
+                    dialog.dismiss()
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+        }
+    }
+    
+    private fun updateThemeText() {
+        val currentTheme = prefs.getInt(Constants.PREFS_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        binding.tvCurrentTheme.text = when (currentTheme) {
+            AppCompatDelegate.MODE_NIGHT_NO -> getString(R.string.theme_light)
+            AppCompatDelegate.MODE_NIGHT_YES -> getString(R.string.theme_dark)
+            else -> getString(R.string.theme_system)
+        }
     }
     
     private fun setupCurrentMode() {

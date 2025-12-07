@@ -10,35 +10,89 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.chip.ChipGroup
+        <!-- Selection Action Bar -->
+        <LinearLayout
+            android:id="@+id/selectionBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:background="?attr/colorPrimaryContainer"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/btnCloseSelection"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_cancel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Close" />
+
+            <TextView
+                android:id="@+id/tvSelectedCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_execute"
+                style="@style/Widget.Material3.Button.TonalButton" />
+        </LinearLayout>
+
+        <!-- Filter Chips -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            app:singleSelection="true">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipUserApps"
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:singleSelection="true"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipUserApps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chip_user_apps"
+                    android:checkable="true"
+                    style="@style/Widget.Material3.Chip.Filter" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSystemApps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chip_system_apps"
+                    android:checkable="true"
+                    style="@style/Widget.Material3.Chip.Filter" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <Button
+                android:id="@+id/btnSelectAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Apps"
-                android:checkable="true"
-                style="@style/Widget.Material3.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipSystemApps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="System Apps"
-                android:checkable="true"
-                style="@style/Widget.Material3.Chip.Filter" />
-
-        </com.google.android.material.chip.ChipGroup>
+                android:text="@string/btn_select_all"
+                style="@style/Widget.Material3.Button.TextButton" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvAppCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
             android:textColor="@color/on_surface_secondary"
             android:textSize="12sp" />
 
@@ -52,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="80dp" />
+                android:paddingBottom="16dp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -61,18 +115,48 @@
                 android:layout_gravity="center"
                 android:visibility="gone" />
 
+            <!-- Empty/Error State -->
+            <LinearLayout
+                android:id="@+id/emptyState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone"
+                android:padding="32dp">
+
+                <ImageView
+                    android:id="@+id/ivEmptyIcon"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_apps"
+                    android:alpha="0.5" />
+
+                <TextView
+                    android:id="@+id/tvEmptyTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEmptyMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/on_surface_secondary"
+                    android:gravity="center" />
+
+                <Button
+                    android:id="@+id/btnRetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/btn_retry"
+                    android:visibility="gone" />
+            </LinearLayout>
         </FrameLayout>
-
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fabAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:text="Actions"
-        app:icon="@drawable/ic_settings"
-        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
