@@ -14,6 +14,7 @@
     
     <color name="background">#121212</color>
     <color name="surface">#1E1E1E</color>
+    <color name="surface_container">#2D2D2D</color>
     <color name="on_surface">#E0E0E0</color>
     <color name="on_surface_secondary">#9E9E9E</color>
     <color name="outline">#424242</color>
