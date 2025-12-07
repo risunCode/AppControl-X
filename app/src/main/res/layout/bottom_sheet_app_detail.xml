@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/ivAppIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:contentDescription="@string/app_icon_desc" />
 
         <LinearLayout
@@ -30,9 +30,9 @@
                 android:id="@+id/tvAppName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:ellipsize="end" />
 
             <TextView
@@ -40,15 +40,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/on_surface_secondary"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvAppType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLaunchApp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_launch"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:contentDescription="@string/action_launch" />
     </LinearLayout>
 
     <!-- Package Name -->
@@ -283,29 +295,6 @@
         android:textStyle="bold"
         android:textSize="14sp" />
 
-    <!-- Primary Actions: Launch & Settings -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btnLaunchApp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/action_launch"
-            style="@style/Widget.Material3.Button.TonalButton" />
-        <Button
-            android:id="@+id/btnOpenSettings"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="@string/btn_info"
-            style="@style/Widget.Material3.Button.TonalButton" />
-    </LinearLayout>
-
     <!-- Control Actions -->
     <com.google.android.material.chip.ChipGroup
         android:layout_width="match_parent"
@@ -318,6 +307,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_force_stop"
+            app:chipIcon="@drawable/ic_stop"
             app:chipBackgroundColor="@color/surface_container"
             app:chipStrokeWidth="1dp"
             app:chipStrokeColor="@color/outline" />
@@ -327,6 +317,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_freeze"
+            app:chipIcon="@drawable/ic_freeze"
             app:chipBackgroundColor="@color/surface_container"
             app:chipStrokeWidth="1dp"
             app:chipStrokeColor="@color/outline" />
@@ -336,6 +327,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_restrict_bg"
+            app:chipIcon="@drawable/ic_battery_alert"
             app:chipBackgroundColor="@color/surface_container"
             app:chipStrokeWidth="1dp"
             app:chipStrokeColor="@color/outline" />
@@ -345,6 +337,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_clear_cache"
+            app:chipIcon="@drawable/ic_cleaning"
             app:chipBackgroundColor="@color/surface_container"
             app:chipStrokeWidth="1dp"
             app:chipStrokeColor="@color/outline" />
@@ -354,6 +347,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_clear_data"
+            app:chipIcon="@drawable/ic_delete_sweep"
             app:chipBackgroundColor="@color/surface_container"
             app:chipStrokeWidth="1dp"
             app:chipStrokeColor="@color/outline" />
@@ -363,9 +357,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_uninstall"
+            app:chipIcon="@drawable/ic_delete"
             app:chipBackgroundColor="@color/surface_container"
             app:chipStrokeWidth="1dp"
             app:chipStrokeColor="@color/status_negative" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnOpenSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_info"
+            app:chipIcon="@drawable/ic_info"
+            app:chipBackgroundColor="@color/surface_container"
+            app:chipStrokeWidth="1dp"
+            app:chipStrokeColor="@color/outline" />
 
     </com.google.android.material.chip.ChipGroup>
 </LinearLayout>
