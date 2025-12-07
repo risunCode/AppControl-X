@@ -198,8 +198,7 @@ class AppListFragment : Fragment() {
     private fun setupSwipeRefresh() {
         val b = binding ?: return
         b.swipeRefresh.setOnRefreshListener {
-            clearCache() // Clear cache first to ensure fresh data
-            loadApps(forceRefresh = true)
+            refreshAppList()
         }
         b.swipeRefresh.setColorSchemeResources(
             R.color.primary,
@@ -211,8 +210,7 @@ class AppListFragment : Fragment() {
     private fun showAppDetail(app: AppInfo) {
         val bottomSheet = AppDetailBottomSheet.newInstance(app)
         bottomSheet.onActionCompleted = {
-            clearCache()
-            loadApps()
+            refreshAppList()
         }
         bottomSheet.show(childFragmentManager, AppDetailBottomSheet.TAG)
     }
@@ -429,7 +427,7 @@ class AppListFragment : Fragment() {
                 }
             },
             onComplete = { successCount, failCount ->
-                // Log action - always log regardless of action type
+                // Log action
                 rm?.let { manager ->
                     lifecycleScope.launch(Dispatchers.IO) {
                         manager.logAction(ActionLog(
@@ -441,9 +439,8 @@ class AppListFragment : Fragment() {
                     }
                 }
                 
-                adapter.deselectAll()
-                clearCache()
-                loadApps(forceRefresh = true)
+                // Refresh list immediately
+                refreshAppList()
             }
         )
         
@@ -484,6 +481,13 @@ class AppListFragment : Fragment() {
     private fun clearCache() {
         cachedUserApps = null
         cachedSystemApps = null
+    }
+    
+    // Single refresh function - call this after any action
+    fun refreshAppList() {
+        adapter.deselectAll()
+        clearCache()
+        loadApps(forceRefresh = true)
     }
 
     private fun loadApps(forceRefresh: Boolean = false) {
