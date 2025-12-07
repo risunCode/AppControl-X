@@ -16,7 +16,8 @@
         <ImageView
             android:id="@+id/ivAppIcon"
             android:layout_width="64dp"
-            android:layout_height="64dp" />
+            android:layout_height="64dp"
+            android:contentDescription="@string/app_icon_desc" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -30,7 +31,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
 
             <TextView
                 android:id="@+id/tvVersion"
@@ -38,6 +41,13 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/on_surface_secondary"
                 android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvAppType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
@@ -46,12 +56,36 @@
         android:id="@+id/tvPackageName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:textSize="12sp"
         android:textColor="@color/on_surface_secondary"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:fontFamily="monospace" />
 
-    <!-- App Info Cards -->
+    <!-- Processing Status -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvActionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- App Info Card -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,128 +100,176 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- App Size -->
+            <!-- Status Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/detail_app_size"
-                    android:textColor="@color/on_surface_secondary" />
-
-                <TextView
-                    android:id="@+id/tvAppSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/outline" />
-
-            <!-- Install Path -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/detail_install_path"
-                    android:textColor="@color/on_surface_secondary" />
-
-                <TextView
-                    android:id="@+id/tvInstallPath"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="12sp"
-                    android:textIsSelectable="true" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/outline" />
-
-            <!-- Install Date -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/detail_installed"
-                    android:textColor="@color/on_surface_secondary" />
-
-                <TextView
-                    android:id="@+id/tvInstallDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/outline" />
-
-            <!-- Last Updated -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/detail_updated"
-                    android:textColor="@color/on_surface_secondary" />
-
-                <TextView
-                    android:id="@+id/tvUpdateDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/outline" />
-
-            <!-- Status -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
+                android:paddingVertical="6dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/detail_status"
                     android:textColor="@color/on_surface_secondary" />
-
                 <TextView
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Battery Status Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_battery"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvBatteryStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" 
+                android:background="@color/outline" android:layout_marginVertical="8dp" />
+
+            <!-- App Size -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_app_size"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvAppSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- Permissions -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_permissions"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvPermissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- Target SDK -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_target_sdk"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvTargetSdk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- Min SDK -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_min_sdk"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvMinSdk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" 
+                android:background="@color/outline" android:layout_marginVertical="8dp" />
+
+            <!-- Install Path -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_install_path"
+                android:textColor="@color/on_surface_secondary"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tvInstallPath"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:fontFamily="monospace"
+                android:textIsSelectable="true" />
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" 
+                android:background="@color/outline" android:layout_marginVertical="8dp" />
+
+            <!-- Installed -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_installed"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvInstallDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Updated -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail_updated"
+                    android:textColor="@color/on_surface_secondary" />
+                <TextView
+                    android:id="@+id/tvUpdateDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -196,7 +278,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:text="@string/detail_quick_actions"
         android:textStyle="bold"
         android:textSize="14sp" />
@@ -206,7 +288,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/btnForceStop"
             android:layout_width="0dp"
@@ -214,7 +295,6 @@
             android:layout_weight="1"
             android:text="@string/action_force_stop"
             style="@style/Widget.Material3.Button.OutlinedButton" />
-
         <Button
             android:id="@+id/btnToggleEnable"
             android:layout_width="0dp"
@@ -230,7 +310,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/btnToggleBackground"
             android:layout_width="0dp"
@@ -238,7 +317,6 @@
             android:layout_weight="1"
             android:text="@string/action_restrict_bg"
             style="@style/Widget.Material3.Button.OutlinedButton" />
-
         <Button
             android:id="@+id/btnUninstall"
             android:layout_width="0dp"
@@ -250,13 +328,11 @@
             style="@style/Widget.Material3.Button.OutlinedButton" />
     </LinearLayout>
 
-    <!-- Open in Settings -->
     <Button
         android:id="@+id/btnOpenSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:text="@string/detail_open_settings"
         style="@style/Widget.Material3.Button.TonalButton" />
-
 </LinearLayout>

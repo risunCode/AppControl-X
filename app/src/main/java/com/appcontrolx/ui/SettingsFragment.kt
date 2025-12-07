@@ -82,19 +82,69 @@ class SettingsFragment : Fragment() {
     }
     
     private fun setupCurrentMode() {
-        val mode = PermissionBridge().detectMode()
-        binding.tvCurrentMode.text = mode.displayName()
+        updateModeDisplay()
         
         binding.btnChangeMode.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.settings_change_mode_title)
-                .setMessage(R.string.settings_change_mode_message)
-                .setPositiveButton(R.string.confirm_yes) { _, _ ->
-                    restartSetup()
-                }
-                .setNegativeButton(R.string.confirm_no, null)
-                .show()
+            showModeSelectionDialog()
         }
+    }
+    
+    private fun updateModeDisplay() {
+        val mode = PermissionBridge().detectMode()
+        binding.tvCurrentMode.text = mode.displayName()
+    }
+    
+    private fun showModeSelectionDialog() {
+        val permissionBridge = PermissionBridge()
+        val hasRoot = permissionBridge.isRootAvailable()
+        val hasShizuku = permissionBridge.isShizukuAvailable() && permissionBridge.isShizukuPermissionGranted()
+        
+        val modes = mutableListOf<String>()
+        val modeValues = mutableListOf<String>()
+        
+        if (hasRoot) {
+            modes.add(getString(R.string.mode_root))
+            modeValues.add(Constants.MODE_ROOT)
+        }
+        if (hasShizuku) {
+            modes.add(getString(R.string.mode_shizuku))
+            modeValues.add(Constants.MODE_SHIZUKU)
+        }
+        modes.add(getString(R.string.mode_view_only))
+        modeValues.add(Constants.MODE_NONE)
+        
+        val currentMode = prefs.getString(Constants.PREFS_EXECUTION_MODE, Constants.MODE_NONE)
+        val currentIndex = modeValues.indexOf(currentMode).coerceAtLeast(0)
+        
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.settings_change_mode_title)
+            .setSingleChoiceItems(modes.toTypedArray(), currentIndex) { dialog, which ->
+                val selectedMode = modeValues[which]
+                prefs.edit().putString(Constants.PREFS_EXECUTION_MODE, selectedMode).apply()
+                updateModeDisplay()
+                dialog.dismiss()
+                
+                // Show restart prompt
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.settings_mode_changed)
+                    .setMessage(R.string.settings_restart_required)
+                    .setPositiveButton(R.string.settings_restart_now) { _, _ ->
+                        restartApp()
+                    }
+                    .setNegativeButton(R.string.settings_restart_later, null)
+                    .show()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+    
+    private fun restartApp() {
+        val intent = requireContext().packageManager
+            .getLaunchIntentForPackage(requireContext().packageName)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        requireActivity().finish()
+        Runtime.getRuntime().exit(0)
     }
     
     private fun setupSafetySettings() {

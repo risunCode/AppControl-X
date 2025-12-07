@@ -156,17 +156,55 @@
     <string name="btn_info">App Info</string>
     <string name="app_icon_desc">App Icon</string>
     <string name="status_frozen">Frozen</string>
+    <string name="status_restricted">Restricted</string>
+    <string name="status_allowed">Allowed</string>
+    <string name="status_default">Default</string>
     <string name="detail_version_format">v%1$s (%2$d)</string>
     <string name="detail_app_size">App Size</string>
     <string name="detail_install_path">Install Path</string>
     <string name="detail_installed">Installed</string>
     <string name="detail_updated">Last Updated</string>
     <string name="detail_status">Status</string>
+    <string name="detail_battery">Background</string>
+    <string name="detail_permissions">Permissions</string>
+    <string name="detail_permissions_count">%d permissions</string>
+    <string name="detail_target_sdk">Target SDK</string>
+    <string name="detail_min_sdk">Min SDK</string>
+    <string name="detail_sdk_format">API %d</string>
+    <string name="detail_system_app">System App</string>
+    <string name="detail_user_app">User App</string>
     <string name="detail_quick_actions">Quick Actions</string>
     <string name="detail_open_settings">Open in System Settings</string>
     <string name="action_disable">Disable</string>
     <string name="action_enable">Enable</string>
+    <string name="action_processing">%s...</string>
+    <string name="action_completed">%s completed</string>
+    <string name="action_failed_name">%s failed</string>
     <string name="error_load_app_info">Failed to load app info</string>
     <string name="error_open_settings">Could not open settings</string>
     <string name="action_failed_generic">Action failed</string>
+    
+    <!-- Settings Mode -->
+    <string name="settings_mode_changed">Mode Changed</string>
+    <string name="settings_restart_required">App restart is required to apply the new execution mode.</string>
+    <string name="settings_restart_now">Restart Now</string>
+    <string name="settings_restart_later">Later</string>
+    
+    <!-- About -->
+    <string name="about_tagline">Control your apps, save your battery</string>
+    <string name="about_version_format">Version %1$s (%2$d)</string>
+    <string name="about_features_title">Features</string>
+    <string name="about_features_list">• Freeze/Unfreeze apps (disable without uninstall)\n• Force stop running apps\n• Restrict background activity\n• Batch operations on multiple apps\n• System app protection\n• Xiaomi/MIUI/HyperOS support\n• Rollback with state snapshots\n• Root and Shizuku support\n• Material You design</string>
+    <string name="about_system_title">System Info</string>
+    <string name="about_device">Device</string>
+    <string name="about_device_format">%1$s %2$s</string>
+    <string name="about_android">Android</string>
+    <string name="about_android_format">%1$s (API %2$d)</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_share">Share</string>
+    <string name="about_rate">Star</string>
+    <string name="about_bug_report">Report Bug</string>
+    <string name="about_share_text">Check out AppControlX - Control your apps and save battery!\n\nhttps://github.com/risunCode/AppControl-X</string>
+    <string name="about_share_via">Share via</string>
+    <string name="about_credits">Made with care by risunCode</string>
 </resources>

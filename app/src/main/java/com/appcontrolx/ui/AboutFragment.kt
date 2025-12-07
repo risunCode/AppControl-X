@@ -2,6 +2,7 @@ package com.appcontrolx.ui
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +26,7 @@ class AboutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         setupAppInfo()
-        setupCurrentMode()
+        setupSystemInfo()
         setupLinks()
     }
     
@@ -33,12 +34,19 @@ class AboutFragment : Fragment() {
         val packageInfo = requireContext().packageManager
             .getPackageInfo(requireContext().packageName, 0)
         
-        binding.tvVersion.text = "v${packageInfo.versionName}"
-    }
-    
-    private fun setupCurrentMode() {
+        binding.tvVersion.text = getString(R.string.about_version_format, 
+            packageInfo.versionName, packageInfo.longVersionCode)
+        
+        // Current mode
         val mode = PermissionBridge().detectMode()
         binding.tvCurrentMode.text = mode.displayName()
+    }
+    
+    private fun setupSystemInfo() {
+        binding.tvDeviceInfo.text = getString(R.string.about_device_format,
+            Build.MANUFACTURER, Build.MODEL)
+        binding.tvAndroidVersion.text = getString(R.string.about_android_format,
+            Build.VERSION.RELEASE, Build.VERSION.SDK_INT)
     }
     
     private fun setupLinks() {
@@ -49,21 +57,27 @@ class AboutFragment : Fragment() {
         binding.btnShare.setOnClickListener {
             shareApp()
         }
+        
+        binding.btnRate.setOnClickListener {
+            openUrl("https://github.com/risunCode/AppControl-X/stargazers")
+        }
+        
+        binding.btnBugReport.setOnClickListener {
+            openUrl("https://github.com/risunCode/AppControl-X/issues/new")
+        }
     }
     
     private fun openUrl(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
     
     private fun shareApp() {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            putExtra(Intent.EXTRA_TEXT, 
-                "Check out AppControlX - Control your apps, save your battery!")
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.about_share_text))
         }
-        startActivity(Intent.createChooser(intent, "Share via"))
+        startActivity(Intent.createChooser(intent, getString(R.string.about_share_via)))
     }
     
     override fun onDestroyView() {
