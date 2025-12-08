@@ -49,18 +49,15 @@ class MainActivity : AppCompatActivity() {
     private fun showWhatsNewDialog() {
         val updateLog = """
             |v1.1.0
-            |• Showcase website with gallery
-            |• Expanded background ops viewer
-            |• Autostart Manager (13 OEM brands)
-            |• App sheet stacking fix
-            |• ProGuard fixes for release builds
+            |• View more background ops in app detail
+            |• Autostart Manager for all brands
+            |• Bug fixes and improvements
             |
             |v1.0.0
-            |• Initial release
             |• Freeze/Unfreeze apps
-            |• Force Stop & Clear Cache/Data
+            |• Force Stop, Clear Cache/Data
             |• Restrict/Allow Background
-            |• Batch operations with progress
+            |• Batch operations
             |• Activity Launcher
             |• Action Logs with rollback
         """.trimMargin()
