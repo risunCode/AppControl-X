@@ -28,6 +28,12 @@
 # Keep all executors
 -keep class com.appcontrolx.executor.** { *; }
 
+# Keep MainActivity methods (What's New dialog)
+-keepclassmembers class com.appcontrolx.ui.MainActivity {
+    private void showWhatsNewIfNeeded();
+    private void showWhatsNewDialog();
+}
+
 # Keep Models
 -keep class com.appcontrolx.model.** { *; }
 -keep class com.appcontrolx.data.local.entity.** { *; }
