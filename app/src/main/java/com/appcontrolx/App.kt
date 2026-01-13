@@ -25,6 +25,8 @@ class App : Application() {
     
     companion object {
         private const val TAG = "AppControlX"
+        private const val PREFS_THEME = "theme"
+        private const val PREFS_DYNAMIC_COLORS = "dynamic_colors"
         
         init {
             // Configure libsu for root shell
@@ -107,10 +109,5 @@ class App : Application() {
             else -> "System"
         }
         Log.d(TAG, "Theme applied: $themeName")
-    }
-    
-    private companion object {
-        const val PREFS_THEME = "theme"
-        const val PREFS_DYNAMIC_COLORS = "dynamic_colors"
     }
 }

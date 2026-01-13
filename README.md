@@ -1,41 +1,56 @@
 # AppControlX
 
-A powerful Android application for controlling app behavior, battery optimization, and system management — using Root or Shizuku.
+A powerful Android application for controlling app behavior, system monitoring, and device management — using Root or Shizuku.
+
+## What's New in v2.0.0 🎉
+
+Complete rewrite with modern architecture and new features:
+- **Dashboard** - Real-time system monitoring (CPU, RAM, Battery, Storage, Network, GPU)
+- **Setup Wizard** - Guided first-time setup with mode selection
+- **Mode Loss Detection** - Automatic detection when Root/Shizuku access is lost
+- **Display Refresh Rate Control** - Set min/max refresh rate
+- **Clean Architecture** - MVVM + Hilt DI with organized package structure
 
 ## Features
 
-### App Control
+### 🏠 Dashboard
+Real-time system monitoring with DevCheck-style cards:
+- **CPU** - Usage percentage, temperature, core count
+- **Battery** - Level, charging status, temperature, health
+- **RAM** - Used, free, total memory
+- **Storage** - Internal storage usage
+- **Network** - Connection type, status, WiFi SSID
+- **Display** - Resolution, refresh rate
+- **GPU** - Model and vendor (requires root)
+- **Device** - Brand, model, Android version, uptime
+
+### 📱 App Control
 - **Freeze/Unfreeze** - Disable apps without uninstalling (keeps data intact)
 - **Uninstall** - Remove apps for current user while preserving data
 - **Force Stop** - Immediately terminate running applications
 - **Clear Cache/Data** - Clean app storage with size preview
 - **Batch Operations** - Apply actions to multiple apps with progress tracking
 
-### Battery Optimization
+### 🔋 Battery Optimization
 - **Restrict Background** - Block apps from running in background
 - **Allow Background** - Permit background execution
 - **Real-time Status** - View current background restriction status per app
+- **Multiple AppOps** - RUN_IN_BACKGROUND, RUN_ANY_IN_BACKGROUND, WAKE_LOCK, BOOT_COMPLETED
 
-### Tools
-- **Activity Launcher** - Launch hidden activities from any app (hold to copy path)
-- **QColor / Display Color** - Qualcomm QColor, MediaTek MiraVision, AOSP, Samsung
-- **Extra Dim** - Reduce screen brightness below minimum (Android 12+)
-- **Notification Log/History** - Access notification records
-- **Battery Optimization** - View app battery consumption
-- **Power Mode** - Quick access to power settings
-- **Device Info & Diagnostic** - System information
-- **Unknown Sources** - Control app install permissions
-- **Manage Apps (AOSP)** - Pure AOSP app manager
+### 🖥️ Display Settings
+- **Refresh Rate Control** - Set minimum and maximum refresh rate
+- **Reset to Default** - Restore system default settings
+- *Requires Root or Shizuku*
 
-### Action Logs & Rollback
+### 📜 Action Logs & Rollback
 - **Action History** - Track all operations with timestamps
 - **Rollback** - Reverse battery actions (Freeze/Unfreeze, Restrict/Allow)
 - **State Snapshots** - Automatic backup before actions
 
-### UI/UX
-- **Material 3 Design** - Modern, clean interface with icons
+### 🎨 UI/UX
+- **Material 3 Design** - Modern interface with dynamic colors (Android 12+)
 - **Dark Mode** - Full dark theme support
-- **Multi-language** - English & Indonesian
+- **Bottom Navigation** - Dashboard, Apps, Settings
 - **Search & Filter** - Quick app discovery by name, package, or status
 
 ## Screenshots
@@ -50,14 +65,7 @@ A powerful Android application for controlling app behavior, battery optimizatio
 
 ## Platform Support
 
-| Platform | Version | Support |
-|----------|---------|---------|
-| Android Stock | 10 - 15 | Full |
-| MIUI/HyperOS | 12+ | Full |
-| Samsung OneUI | 3+ | Full |
-| ColorOS/Realme | 11+ | Full |
-| OxygenOS | 11+ | Full |
-| Custom ROM | Android 10+ | Full |
+- Android 10+ (API 29) - Stock, AOSP, Custom ROMs
 
 ### Protected System Apps
 SafetyValidator blocks critical system packages from being disabled/frozen to prevent bricking. Covers AOSP, Google, Xiaomi, Samsung, OPPO, Vivo, Huawei, OnePlus, Nothing, ASUS, Sony, Motorola, and more.
@@ -66,14 +74,14 @@ SafetyValidator blocks critical system packages from being disabled/frozen to pr
 
 - Android 10+ (API 29)
 - One of the following:
-  - **Root access** (Magisk recommended)
+  - **Root access** (Magisk/KernelSU recommended)
   - **Shizuku** installed and activated (full features, no root needed)
 
-### Features Without Root
-These features work without Root or Shizuku:
-- **Tools** - All hidden settings shortcuts (Extra Dim, QColor, Notification Log, etc.)
-- **Activity Launcher** - Browse and launch any app's activities
-- **Autostart Manager** - Quick access to OEM autostart settings
+### Features Without Root/Shizuku
+These features work in View-Only mode:
+- **Dashboard** - System monitoring (limited GPU info)
+- **App List** - Browse installed apps
+- **Settings** - Theme and preferences
 
 ## Installation
 
@@ -88,22 +96,7 @@ git clone https://github.com/risunCode/AppControl-X.git
 cd AppControl-X
 ./gradlew assembleDebug
 ```
-
-## Architecture
-
-MVVM architecture with Hilt dependency injection.
-
-```
-com.appcontrolx/
-├── data/local/         # Room Database
-├── di/                 # Hilt modules
-├── executor/           # Command execution (Root/Shizuku)
-├── model/              # Data classes
-├── rollback/           # Action logs & rollback
-├── service/            # Business logic
-├── ui/                 # Activities, Fragments, Adapters
-└── utils/              # Helpers & validators
-```
+ 
 
 ### Key Components
 
@@ -112,20 +105,69 @@ com.appcontrolx/
 | `PermissionBridge` | Detects execution mode (Root/Shizuku/None) |
 | `RootExecutor` | Executes commands via libsu with security validation |
 | `ShizukuExecutor` | Executes commands via Shizuku UserService |
-| `BatteryPolicyManager` | Manages appops and battery settings |
-| `RollbackManager` | Action logs and state snapshots |
+| `SystemMonitor` | Real-time system info (CPU, RAM, Battery, etc.) |
+| `AppScanner` | Accurate app detection using dumpsys + PackageManager |
+| `AppControlManager` | App actions (freeze, uninstall, force stop, etc.) |
+| `BatteryManager` | Background restriction via appops |
+| `ActionLogger` | Action history and rollback |
 | `SafetyValidator` | Prevents actions on critical system apps |
+| `ModeWatcher` | Detects Root/Shizuku access loss |
 
 ## Tech Stack
 
-- **Language**: Kotlin 1.9
-- **Min SDK**: 29 (Android 10)
-- **Target SDK**: 34 (Android 14)
-- **Architecture**: MVVM + Hilt
-- **UI**: Material 3, ViewBinding
-- **Async**: Coroutines + Flow
-- **Root**: [libsu](https://github.com/topjohnwu/libsu)
-- **Shizuku**: [Shizuku-API](https://github.com/RikkaApps/Shizuku-API)
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Kotlin | 1.9 | Primary language |
+| Min SDK | 29 (Android 10) | Minimum supported |
+| Target SDK | 34 (Android 14) | Target version |
+aApps/Shizuku) - Elevated API access
+- Built with [Kiro](https://kiro.dev) AI Assistant
+ rate
+settings delete system min_refresh_rate       # Reset to default
+```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for full history.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push and open a Pull Request
+
+## License
+
+GPL-3.0 License - see [LICENSE](LICENSE)
+
+## Credits
+
+Made with ❤️ by [risunCode](https://github.com/risunCode)
+
+### Acknowledgments
+
+- [libsu](https://github.com/topjohnwu/libsu) - Root shell library
+- [Shizuku](https://github.com/RikkBOOT_COMPLETED ignore      # Disable boot receiver
+```
+
+### Display Settings
+```bash
+settings put system min_refresh_rate <hz>     # Set min refresh rate
+settings put system peak_refresh_rate <hz>    # Set max refreshe <package>                    # Unfreeze
+pm uninstall -k --user 0 <package>    # Uninstall
+am force-stop <package>                # Force stop
+pm clear --cache-only <package>        # Clear cache
+pm clear <package>                     # Clear data
+```lin | 1.9 | Primary language |
+| Min SDK | 29 (Android 10) | Minimum supported |
+| Target SDK | 34 (Android 14) | Target version |
+| Hilt | 2.50 | Dependency Injection |
+| libsu | 5.2.2 | Root access |
+| Shizuku | 13.1.5 | Non-root privileged access |
+| Navigation | 2.7.6 | Fragment navigation |
+| Coroutines | 1.7.3 | Async operations |
+| Material 3 | 1.11.0 | UI components |
 
 ## Commands Reference
 
@@ -141,9 +183,17 @@ pm clear <package>                     # Clear data
 
 ### Battery Control
 ```bash
-appops set <package> RUN_IN_BACKGROUND ignore    # Restrict
-appops set <package> RUN_IN_BACKGROUND allow     # Allow
-appops set <package> WAKE_LOCK ignore            # Disable wake lock
+appops set <package> RUN_IN_BACKGROUND ignore       # Restrict
+appops set <package> RUN_ANY_IN_BACKGROUND ignore   # Restrict (extended)
+appops set <package> WAKE_LOCK ignore               # Disable wake lock
+appops set <package> BOOT_COMPLETED ignore          # Disable boot receiver
+```
+
+### Display Settings
+```bash
+settings put system min_refresh_rate <hz>     # Set min refresh rate
+settings put system peak_refresh_rate <hz>    # Set max refresh rate
+settings delete system min_refresh_rate       # Reset to default
 ```
 
 ## Changelog
@@ -169,3 +219,4 @@ Made with ❤️ by [risunCode](https://github.com/risunCode)
 
 - [libsu](https://github.com/topjohnwu/libsu) - Root shell library
 - [Shizuku](https://github.com/RikkaApps/Shizuku) - Elevated API access
+- Built with [Kiro](https://kiro.dev) AI Assistant

@@ -61,19 +61,21 @@ class AppListViewModel @Inject constructor(
     }
 
     init {
-        // Detect execution mode
-        val mode = permissionBridge.detectMode()
-        _uiState.update { it.copy(executionMode = mode) }
-        
-        // Select executor based on mode
-        executor = when (mode) {
-            ExecutionMode.Root -> rootExecutor
-            ExecutionMode.Shizuku -> shizukuExecutor
-            ExecutionMode.None -> null
+        // Detect execution mode in coroutine
+        viewModelScope.launch {
+            val mode = permissionBridge.detectMode()
+            _uiState.update { it.copy(executionMode = mode) }
+            
+            // Select executor based on mode
+            executor = when (mode) {
+                ExecutionMode.Root -> rootExecutor
+                ExecutionMode.Shizuku -> shizukuExecutor
+                ExecutionMode.None -> null
+            }
+            
+            // Setup scanner with executor
+            appScanner.setExecutor(executor, mode)
         }
-        
-        // Setup scanner with executor
-        appScanner.setExecutor(executor, mode)
     }
 
 

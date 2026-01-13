@@ -36,6 +36,8 @@ class PermissionBridge @Inject constructor(
         private const val MODE_ROOT = "root"
         private const val MODE_SHIZUKU = "shizuku"
         private const val MODE_NONE = "none"
+        
+        const val SHIZUKU_PERMISSION_REQUEST_CODE = 1001
     }
     
     private val prefs: SharedPreferences by lazy {
@@ -294,9 +296,5 @@ class PermissionBridge @Inject constructor(
             clearSavedMode()
             detectMode(forceDetect = true)
         }
-    }
-    
-    companion object {
-        const val SHIZUKU_PERMISSION_REQUEST_CODE = 1001
     }
 }
