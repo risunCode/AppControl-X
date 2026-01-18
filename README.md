@@ -1,6 +1,11 @@
 # AppControlX
-
 A powerful Android application for controlling app behavior, system monitoring, and device management — using Root or Shizuku.
+
+
+### Dev notes
+- Hi, currently i dont have enough time for maintain this project...
+- This entire code is shit, later i will come with full clean code :D, no ETA. 
+
 
 ## What's New in v2.0.0 🎉
 
